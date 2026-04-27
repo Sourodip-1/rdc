@@ -17,12 +17,12 @@ const Navbar1 = () => {
   }, []);
 
   const navLinks = [
-    { name: "Services", href: "#services" },
-    { name: "Our Work", href: "#work" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "About us", href: "#about" },
-    { name: "Blog", href: "#" },
-    { name: "Our Venues", href: "#venues" },
+    { name: "Services", href: "/#services" },
+    { name: "Our Work", href: "/#work" },
+    { name: "Pricing", href: "/#pricing" },
+    { name: "About Us", href: "/about" },
+    { name: "Our Venues", href: "/#venues" },
+    { name: "Blog", href: "/blog" },
   ];
 
   return (

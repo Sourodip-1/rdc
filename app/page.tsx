@@ -1,17 +1,13 @@
 "use client";
 
 import { useState } from "react";
+
 import Navbar1 from "@/components/ui/navbar-1";
 import Hero from "./components/Hero";
 import Carousel from "./components/Carousel";
-import AboutSection from "./components/AboutSection";
-import ServicesSection from "./components/ServicesSection";
-import { HeroGalleryDemo } from "@/components/blocks/HeroGalleryDemo";
-import { CreativePricingDemo } from "@/components/CreativePricingDemo";
 import FloatingBookButton from "./components/FloatingBookButton";
 import { StaggerTestimonials } from "@/components/ui/stagger-testimonials";
 import VenuesModal from "./components/VenuesModal";
-import Footer from "./components/Footer";
 
 const S = {
   maxW: { maxWidth: 1200, margin: "0 auto", width: "100%", padding: "0 32px" },
@@ -19,6 +15,10 @@ const S = {
   fg: "#0D0D0D",
   bg: "#FDFBF7",
 };
+import PricingSection from "./components/PricingSection";
+import ServicesSection from "./components/ServicesSection";
+import GallerySection from "./components/GallerySection";
+import Footer from "./components/Footer";
 
 export default function Home() {
   const [isVenuesModalOpen, setIsVenuesModalOpen] = useState(false);
@@ -29,17 +29,11 @@ export default function Home() {
       <Hero />
       <Carousel />
 
-      <section id="about">
-        <AboutSection />
-      </section>
-
-      <section id="services">
-        <div style={{ background: S.fg }}>
-          <div style={{ borderRadius: "0 0 80px 80px", overflow: "hidden", position: "relative", zIndex: 10 }}>
-            <ServicesSection />
-          </div>
+      <div style={{ background: S.fg }}>
+        <div style={{ borderRadius: "0 0 80px 80px", overflow: "hidden", position: "relative", zIndex: 10 }}>
+          <ServicesSection />
         </div>
-      </section>
+      </div>
 
       {/* ── Philosophy ── */}
       <section style={{ padding: "120px 32px", background: S.fg, position: "relative", overflow: "hidden", zIndex: 5 }}>
@@ -47,14 +41,16 @@ export default function Home() {
           DESI
         </div>
         <div style={{ ...S.maxW, textAlign: "center", position: "relative", zIndex: 1 }}>
+          <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 24 }}>
+          </p>
           <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(36px,5.5vw,72px)", lineHeight: 1.05, letterSpacing: "-0.03em", color: "#fff", marginBottom: 40 }}>
-            Why Choose<em style={{ fontStyle: "italic", fontWeight: 400, color: S.accent }}> Royal</em> Desi Crew?
+            Why Choose<em style={{ fontStyle: "italic", fontWeight: 400, color: S.accent }}> Royal</em> Desi Crew ?
           </h2>
           <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 300, fontSize: "clamp(16px,1.8vw,22px)", color: "rgba(255,255,255,0.65)", maxWidth: 760, margin: "0 auto 48px", lineHeight: 1.8 }}>
             &ldquo;We’re not just an event company—we’re the team that brings your vision to life.&rdquo;
           </p>
           <div style={{ fontFamily: "var(--font-playfair)", fontStyle: "italic", fontSize: "1.2rem", color: S.accent }}>— Royal Desi Crew Event & Entertainment.</div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, marginTop: 80 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24, marginTop: 80 }}>
             {[
               { icon: "✦", title: "Vision", desc: "Every detail is curated with purpose and intention." },
               { icon: "◈", title: "Precision", desc: "Flawless execution, from concept to celebration." },
@@ -68,11 +64,6 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* ── Gallery ── */}
-      <section id="work">
-        <HeroGalleryDemo />
       </section>
 
       {/* Scoped background for inverse curve */}
@@ -104,7 +95,7 @@ export default function Home() {
                 VIEW ALL VENUES <span>→</span>
               </button>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
               {[
                 { name: "Grand Ballroom", tag: "Capacity: 800+", img: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2074&auto=format&fit=crop" },
                 { name: "Lakeside Garden", tag: "Outdoor Luxury", img: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=2069&auto=format&fit=crop" },
@@ -126,71 +117,71 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* ── Pricing ── */}
-        <section id="pricing" style={{ padding: "80px 0", background: S.bg }}>
-           <CreativePricingDemo />
-        </section>
+        <GallerySection />
+        <PricingSection />
       </div>
 
-      {/* ── Contact ── */}
-      <section id="contact" style={{ padding: "120px 32px", background: "#fff", position: "relative", zIndex: 10 }}>
-        <div style={{ ...S.maxW, maxWidth: 760 }}>
-          <div style={{ textAlign: "center", marginBottom: 64 }}>
-            <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 24 }}>Get In Touch</p>
-            <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(36px,5vw,64px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1.05, marginBottom: 20 }}>
-              Start Your <em style={{ fontStyle: "italic", fontWeight: 400, color: S.accent }}>Journey</em>
-            </h2>
-            <p style={{ fontFamily: "var(--font-montserrat)", fontSize: "1rem", color: "rgba(13,13,13,0.5)", lineHeight: 1.75 }}>
-              Tell us about your dream event, and let&apos;s make it a royal reality.
-            </p>
-          </div>
-          <form style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 20, background: S.bg, padding: 48, borderRadius: 32, boxShadow: "0 32px 80px rgba(0,0,0,0.07)", border: "1px solid rgba(0,0,0,0.05)" }}>
-            {[
-              { id: "name", label: "Full Name", placeholder: "John Doe", type: "text" },
-              { id: "email", label: "Email Address", placeholder: "john@example.com", type: "email" },
-            ].map(f => (
-              <div key={f.id} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <label htmlFor={f.id} style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(13,13,13,0.45)" }}>{f.label}</label>
-                <input id={f.id} type={f.type} placeholder={f.placeholder}
-                  style={{ width: "100%", padding: "16px 20px", borderRadius: 16, border: "1.5px solid rgba(0,0,0,0.09)", background: "#fff", fontFamily: "var(--font-montserrat)", fontSize: "0.95rem", color: S.fg, outline: "none", transition: "border-color 0.2s" }}
+      {/* Scoped Dark Background for Inverse Rounding transition */}
+      <div style={{ background: S.fg }}>
+        {/* ── Contact ── */}
+        <section style={{ padding: "120px 32px", background: "#fff", position: "relative", zIndex: 10 }}>
+          <div style={{ ...S.maxW, maxWidth: 760 }}>
+            <div style={{ textAlign: "center", marginBottom: 64 }}>
+              <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 24 }}>Get In Touch</p>
+              <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(36px,5vw,64px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1.05, marginBottom: 20 }}>
+                Start Your <em style={{ fontStyle: "italic", fontWeight: 400, color: S.accent }}>Journey</em>
+              </h2>
+              <p style={{ fontFamily: "var(--font-montserrat)", fontSize: "1rem", color: "rgba(13,13,13,0.5)", lineHeight: 1.75 }}>
+                Tell us about your dream event, and let&apos;s make it a royal reality.
+              </p>
+            </div>
+            <form style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, background: S.bg, padding: 48, borderRadius: 32, boxShadow: "0 32px 80px rgba(0,0,0,0.07)", border: "1px solid rgba(0,0,0,0.05)" }}>
+              {[
+                { id: "name", label: "Full Name", placeholder: "John Doe", type: "text", col: 1 },
+                { id: "email", label: "Email Address", placeholder: "john@example.com", type: "email", col: 1 },
+              ].map(f => (
+                <div key={f.id} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <label htmlFor={f.id} style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(13,13,13,0.45)" }}>{f.label}</label>
+                  <input id={f.id} type={f.type} placeholder={f.placeholder}
+                    style={{ width: "100%", padding: "16px 20px", borderRadius: 16, border: "1.5px solid rgba(0,0,0,0.09)", background: "#fff", fontFamily: "var(--font-montserrat)", fontSize: "0.95rem", color: S.fg, outline: "none", transition: "border-color 0.2s" }}
+                    onFocus={e => (e.currentTarget.style.borderColor = S.accent)}
+                    onBlur={e => (e.currentTarget.style.borderColor = "rgba(0,0,0,0.09)")}
+                  />
+                </div>
+              ))}
+              <div style={{ gridColumn: "1/-1", display: "flex", flexDirection: "column", gap: 8 }}>
+                <label htmlFor="message" style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(13,13,13,0.45)" }}>Your Vision</label>
+                <textarea id="message" placeholder="Describe your event..." rows={5}
+                  style={{ width: "100%", padding: "16px 20px", borderRadius: 16, border: "1.5px solid rgba(0,0,0,0.09)", background: "#fff", fontFamily: "var(--font-montserrat)", fontSize: "0.95rem", color: S.fg, outline: "none", resize: "none", transition: "border-color 0.2s" }}
                   onFocus={e => (e.currentTarget.style.borderColor = S.accent)}
                   onBlur={e => (e.currentTarget.style.borderColor = "rgba(0,0,0,0.09)")}
                 />
               </div>
-            ))}
-            <div style={{ gridColumn: "1/-1", display: "flex", flexDirection: "column", gap: 8 }}>
-              <label htmlFor="message" style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(13,13,13,0.45)" }}>Your Vision</label>
-              <textarea id="message" placeholder="Describe your event..." rows={5}
-                style={{ width: "100%", padding: "16px 20px", borderRadius: 16, border: "1.5px solid rgba(0,0,0,0.09)", background: "#fff", fontFamily: "var(--font-montserrat)", fontSize: "0.95rem", color: S.fg, outline: "none", resize: "none", transition: "border-color 0.2s" }}
-                onFocus={e => (e.currentTarget.style.borderColor = S.accent)}
-                onBlur={e => (e.currentTarget.style.borderColor = "rgba(0,0,0,0.09)")}
-              />
-            </div>
-            <div style={{ gridColumn: "1/-1" }}>
-              <button type="submit"
-                style={{ width: "100%", padding: "18px", background: S.fg, color: "#fff", border: "none", borderRadius: 9999, fontFamily: "var(--font-montserrat)", fontWeight: 800, fontSize: "0.875rem", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", transition: "all 0.3s", boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}
-                onMouseEnter={e => { const b = e.currentTarget; b.style.background = S.accent; b.style.boxShadow = "0 12px 40px rgba(255,107,74,0.4)"; }}
-                onMouseLeave={e => { const b = e.currentTarget; b.style.background = S.fg; b.style.boxShadow = "0 8px 32px rgba(0,0,0,0.15)"; }}
-              >
-                Send Enquiry
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
+              <div style={{ gridColumn: "1/-1" }}>
+                <button type="submit"
+                  style={{ width: "100%", padding: "18px", background: S.fg, color: "#fff", border: "none", borderRadius: 9999, fontFamily: "var(--font-montserrat)", fontWeight: 800, fontSize: "0.875rem", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", transition: "all 0.3s", boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}
+                  onMouseEnter={e => { const b = e.currentTarget; b.style.background = S.accent; b.style.boxShadow = "0 12px 40px rgba(255,107,74,0.4)"; }}
+                  onMouseLeave={e => { const b = e.currentTarget; b.style.background = S.fg; b.style.boxShadow = "0 8px 32px rgba(0,0,0,0.15)"; }}
+                >
+                  Send Enquiry
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
 
-      {/* ── Testimonials ── */}
-      <section style={{ padding: "120px 0 0 0", background: S.bg, borderRadius: "0 0 80px 80px", overflow: "hidden" }}>
-        <div style={{ textAlign: "center", marginBottom: 60 }}>
-          <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 20 }}>Voices of Royalty</p>
-          <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(36px,5vw,64px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1 }}>Client Appreciations</h2>
-        </div>
-        <StaggerTestimonials />
-      </section>
+        {/* ── Testimonials ── */}
+        <section style={{ padding: "120px 0 0 0", background: S.bg, borderRadius: "0 0 80px 80px", overflow: "hidden" }}>
+          <div style={{ textAlign: "center", marginBottom: 60 }}>
+            <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 20 }}>Voices of Royalty</p>
+            <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(36px,5vw,64px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1 }}>Client Appreciations</h2>
+          </div>
+          <StaggerTestimonials />
+        </section>
 
-      {/* ── Footer ── */}
-      <Footer />
+        {/* ── Footer ── */}
+        <Footer />
+      </div>
 
       <FloatingBookButton />
       <VenuesModal isOpen={isVenuesModalOpen} onClose={() => setIsVenuesModalOpen(false)} />
