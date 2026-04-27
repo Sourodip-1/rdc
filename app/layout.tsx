@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Montserrat, Geist } from "next/font/google";
+import { Playfair_Display, Montserrat, Geist, Caveat } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "./components/SmoothScroll";
 import { cn } from "@/lib/utils";
@@ -16,9 +16,17 @@ const montserrat = Montserrat({
   subsets: ["latin"],
 });
 
+const caveat = Caveat({
+  variable: "--font-handwritten",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "Royal Desi Crew | Premium Event Management",
   description: "Experience the epitome of luxury event management with Royal Desi Crew. We craft unforgettable moments with a touch of royalty.",
+  icons: {
+    icon: "/image.ico",
+  },
 };
 
 export default function RootLayout({
@@ -28,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
-      <body className={`${playfair.variable} ${montserrat.variable} font-body antialiased`}>
+      <body className={`${playfair.variable} ${montserrat.variable} ${caveat.variable} font-body antialiased`}>
         <SmoothScroll>
           {children}
         </SmoothScroll>

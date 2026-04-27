@@ -1,154 +1,276 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { Heart, GraduationCap, PartyPopper, Palette, Baby, Cake, Briefcase, Church, Award } from "lucide-react";
+import { motion, Variants } from "framer-motion";
 
-const services = [
+const SERVICES = [
   {
-    icon: <Church className="w-7 h-7" />,
+    number: "01",
     title: "Luxury Wedding Experiences",
-    description: "From haldi to reception, we design and execute breathtaking weddings that reflect your story and leave a lasting impression on every guest.",
-    accent: "#D4A853",
+    description: "Grand celebrations crafted with meticulous detail — from floral curation to orchestrated timelines.",
+    tag: "Signature Series",
+    imageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop",
   },
   {
-    icon: <Briefcase className="w-7 h-7" />,
+    number: "02",
     title: "Corporate Event Experiences",
-    description: "Make your brand stand out with seamless, high-impact corporate events designed to impress clients, teams, and stakeholders.",
-    accent: "#4A90D9",
+    description: "Executive-class productions that command presence, drive engagement, and leave lasting impressions.",
+    tag: "Executive Series",
+    imageUrl: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop",
   },
   {
-    icon: <PartyPopper className="w-7 h-7" />,
+    number: "03",
     title: "Private Celebrations & Parties",
-    description: "From birthdays to anniversaries, we turn your special moments into unforgettable celebrations filled with style, energy, and joy.",
-    accent: "#E85D75",
+    description: "Intimate gatherings elevated to bespoke affairs with curated themes and flawless execution.",
+    tag: "Royal Collection",
+    imageUrl: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop",
   },
   {
-    icon: <Palette className="w-7 h-7" />,
+    number: "04",
     title: "Theme-Based Event Design",
-    description: "We create electrifying live experiences with professional production, artist coordination, and crowd-engaging performances.",
-    accent: "#9B59B6",
+    description: "Immersive worlds built from vision to reality — every element tells your story.",
+    tag: "Bespoke Craft",
+    imageUrl: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070&auto=format&fit=crop",
   },
   {
-    icon: <Cake className="w-7 h-7" />,
+    number: "05",
     title: "Kids Birthday Experiences",
-    description: "Bring star power to your event with access to top artists, performers, and celebrity appearances managed end-to-end.",
-    accent: "#FF9F43",
+    description: "Magical celebrations designed to spark wonder, joy, and memories that last a lifetime.",
+    tag: "Little Royals",
+    imageUrl: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?q=80&w=2071&auto=format&fit=crop",
   },
   {
-    icon: <Baby className="w-7 h-7" />,
+    number: "06",
     title: "Elegant Baby Shower Celebrations",
-    description: "From stage design to lighting and sound, we handle every technical detail to deliver a flawless and visually stunning event.",
-    accent: "#F8B4C8",
+    description: "Tender, refined gatherings that welcome new beginnings with warmth and elegance.",
+    tag: "New Beginnings",
+    imageUrl: "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?q=80&w=2070&auto=format&fit=crop",
   },
   {
-    icon: <Heart className="w-7 h-7" />,
+    number: "07",
     title: "Anniversary Celebrations",
-    description: "From stage design to lighting and sound, we handle every technical detail to deliver a flawless and visually stunning event.",
-    accent: "#E74C3C",
+    description: "Timeless tributes to love and legacy — every milestone deserves a royal moment.",
+    tag: "Timeless Moments",
+    imageUrl: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop",
   },
   {
-    icon: <GraduationCap className="w-7 h-7" />,
+    number: "08",
     title: "School & Institutional Events",
-    description: "From stage design to lighting and sound, we handle every technical detail to deliver a flawless and visually stunning event.",
-    accent: "#2ECC71",
+    description: "Professionally managed ceremonies and galas that honour achievement and community.",
+    tag: "Legacy Series",
+    imageUrl: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=2070&auto=format&fit=crop",
   },
   {
-    icon: <Award className="w-7 h-7" />,
+    number: "09",
     title: "Retirement & Milestone Celebrations",
-    description: "From stage design to lighting and sound, we handle every technical detail to deliver a flawless and visually stunning event.",
-    accent: "#1ABC9C",
+    description: "Grand finales designed with dignity, warmth, and the grandeur a life well-lived deserves.",
+    tag: "Grand Finale",
+    imageUrl: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2074&auto=format&fit=crop",
   },
 ];
 
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 32 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.07,
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
+
 export default function ServicesSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement[]>([]);
-
-  useEffect(() => {
-    const loadGsap = async () => {
-      const gsap = (await import("gsap")).default;
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      gsap.registerPlugin(ScrollTrigger);
-
-      const heading = sectionRef.current?.querySelector(".services-heading");
-      if (heading) {
-        gsap.fromTo(heading, 
-          { y: 60, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1, ease: "power3.out",
-            scrollTrigger: { trigger: heading, start: "top 85%" }
-          }
-        );
-      }
-
-      cardsRef.current.forEach((card, i) => {
-        if (!card) return;
-        gsap.fromTo(card,
-          { y: 80, opacity: 0, scale: 0.95 },
-          {
-            y: 0, opacity: 1, scale: 1,
-            duration: 0.8,
-            delay: i * 0.08,
-            ease: "power3.out",
-            scrollTrigger: { trigger: card, start: "top 90%" },
-          }
-        );
-      });
-    };
-    loadGsap();
-  }, []);
-
   return (
-    <section 
-      id="services" 
-      ref={sectionRef} 
-      className="w-full flex flex-col items-center justify-center py-32"
-    >
-      {/* Heading */}
-      <div className="services-heading text-center mb-24 max-w-[800px] px-6">
-        <h2 className="text-[clamp(2.5rem,5vw,4.5rem)] font-premium font-black text-[#1a1a1a] mb-6 leading-tight">
-          What We <span className="italic" style={{ color: "#D4A853" }}>Provide</span>
-        </h2>
-        <p className="text-lg md:text-xl text-black/50 leading-relaxed">
-          From intimate celebrations to grand productions, we bring every vision to life
-        </p>
-      </div>
+    <section id="services" style={{ background: "#FDFBF7", padding: "120px 32px" }}>
+      {/* Centered container */}
+      <div style={{ maxWidth: 1600, margin: "0 auto", width: "100%" }}>
 
-      {/* Services Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 w-full max-w-[1300px] px-6 md:px-8 mx-auto">
-        {services.map((service, i) => (
-          <div
-            key={service.title}
-            ref={(el) => { if (el) cardsRef.current[i] = el; }}
-            className="group bg-white rounded-3xl p-10 md:p-12 cursor-pointer transition-all duration-500 hover:-translate-y-3 border border-black/5 hover:border-transparent hover:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.12)] flex flex-col relative overflow-hidden"
-          >
-            {/* Icon */}
-            <div 
-              className="w-[60px] h-[60px] rounded-2xl flex items-center justify-center mb-8 transition-all duration-500 group-hover:scale-110 group-hover:rotate-[-5deg]"
-              style={{ 
-                backgroundColor: `${service.accent}15`,
-                color: service.accent 
+        {/* ── Header ── */}
+        <div style={{ textAlign: "center", marginBottom: 80 }}>
+          <p style={{
+            fontFamily: "var(--font-montserrat)",
+            fontWeight: 700,
+            fontSize: "0.7rem",
+            letterSpacing: "0.22em",
+            color: "#FF6B4A",
+            textTransform: "uppercase",
+            marginBottom: 20,
+          }}>
+            Curated Experiences
+          </p>
+          <h2 style={{
+            fontFamily: "var(--font-playfair)",
+            fontWeight: 900,
+            fontSize: "clamp(40px,5vw,68px)",
+            lineHeight: 1,
+            letterSpacing: "-0.03em",
+            color: "#0D0D0D",
+            marginBottom: 24,
+          }}>
+            Our{" "}
+            <em style={{ fontStyle: "italic", fontWeight: 400, color: "#FF6B4A" }}>
+              Services
+            </em>
+          </h2>
+          <p style={{
+            fontFamily: "var(--font-montserrat)",
+            fontSize: "1rem",
+            color: "rgba(13,13,13,0.5)",
+            lineHeight: 1.8,
+            maxWidth: 520,
+            margin: "0 auto",
+          }}>
+            From intimate family moments to grand royal spectacles — every
+            experience is crafted with intention, precision, and heart.
+          </p>
+        </div>
+
+        {/* ── Service Grid ── */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gap: "1.5rem",
+          borderRadius: 32,
+          overflow: "hidden",
+        }}>
+          {SERVICES.map((service, i) => (
+            <motion.div
+              key={service.number}
+              custom={i}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              variants={cardVariants}
+              whileHover="hover"
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                minHeight: 450,
+                cursor: "pointer",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-end",
+                borderRadius: 24,
               }}
             >
-              {service.icon}
-            </div>
+              {/* ── Full Photo Background ── */}
+              <motion.div
+                variants={{ hover: { scale: 1.07 } }}
+                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  zIndex: 0,
+                }}
+              >
+                <img
+                  src={service.imageUrl}
+                  alt={service.title}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </motion.div>
 
-            {/* Title */}
-            <h3 className="text-[1.25rem] font-bold text-[#1a1a1a] mb-4 leading-snug">
-              {service.title}
-            </h3>
+              {/* ── Full-card dark tint ── */}
+              <div style={{
+                position: "absolute",
+                inset: 0,
+                background: "rgba(10,10,10,0.35)",
+                zIndex: 1,
+              }} />
 
-            {/* Description */}
-            <p className="text-[0.95rem] leading-[1.8] text-black/55 flex-grow">
-              {service.description}
-            </p>
+              {/* ── Bottom gradient ── */}
+              <div style={{
+                position: "absolute",
+                inset: 0,
+                background: "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 100%)",
+                zIndex: 2,
+              }} />
 
-            {/* Bottom accent line */}
-            <div 
-              className="mt-6 h-[3px] w-0 group-hover:w-full rounded-full transition-all duration-700 ease-out"
-              style={{ backgroundColor: service.accent }}
-            />
-          </div>
-        ))}
+              {/* ── Number + Tag ── */}
+              <div style={{
+                position: "absolute",
+                top: 28,
+                left: 28,
+                right: 28,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                zIndex: 3,
+              }}>
+                <span style={{
+                  fontFamily: "var(--font-playfair)",
+                  fontWeight: 900,
+                  fontSize: "clamp(2rem,3vw,2.8rem)",
+                  color: "rgba(255,255,255,0.35)",
+                  lineHeight: 1,
+                }}>
+                  {service.number}
+                </span>
+                <span style={{
+                  fontFamily: "var(--font-montserrat)",
+                  fontWeight: 700,
+                  fontSize: "0.6rem",
+                  letterSpacing: "0.2em",
+                  color: "#FF6B4A",
+                  textTransform: "uppercase",
+                  background: "rgba(0,0,0,0.35)",
+                  padding: "5px 12px",
+                  borderRadius: 9999,
+                  backdropFilter: "blur(6px)",
+                }}>
+                  {service.tag}
+                </span>
+              </div>
+
+              {/* ── Text Content ── */}
+              <div style={{
+                position: "relative",
+                zIndex: 3,
+                padding: "28px",
+              }}>
+                <h3 style={{
+                  fontFamily: "var(--font-playfair)",
+                  fontWeight: 700,
+                  fontSize: "clamp(1.1rem,1.4vw,1.35rem)",
+                  color: "#ffffff",
+                  lineHeight: 1.3,
+                  marginBottom: 10,
+                }}>
+                  {service.title}
+                </h3>
+                <p style={{
+                  fontFamily: "var(--font-montserrat)",
+                  fontSize: "0.85rem",
+                  color: "rgba(255,255,255,0.75)",
+                  lineHeight: 1.7,
+                  marginBottom: 20,
+                }}>
+                  {service.description}
+                </p>
+                {/* Arrow */}
+                <motion.div
+                  variants={{ hover: { background: "#FF6B4A", x: 4 } }}
+                  transition={{ duration: 0.3 }}
+                  style={{
+                    width: 38,
+                    height: 38,
+                    borderRadius: "50%",
+                    border: "1.5px solid rgba(255,255,255,0.4)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1rem",
+                    color: "#fff",
+                  }}
+                >
+                  ↗
+                </motion.div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

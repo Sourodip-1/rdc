@@ -2,43 +2,54 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function FloatingBookButton() {
-  const [isVisible, setIsVisible] = useState(false);
+  const router = useRouter();
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Show after 600px of scroll
-      setIsVisible(window.scrollY > 600);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setVisible(window.scrollY > 600);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ y: 100, opacity: 0, scale: 0.5 }}
+      {visible && (
+        <motion.button
+          initial={{ y: 80, opacity: 0, scale: 0.8 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
-          exit={{ y: 100, opacity: 0, scale: 0.5 }}
-          className="fixed bottom-8 right-8 z-[100]"
+          exit={{ y: 80, opacity: 0, scale: 0.8 }}
+          transition={{ type: "spring", stiffness: 300, damping: 22 }}
+          onClick={() => router.push("/book")}
+          style={{
+            position: "fixed",
+            bottom: 32,
+            right: 32,
+            zIndex: 100,
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "16px 28px",
+            background: "#FF6B4A",
+            color: "#fff",
+            border: "none",
+            borderRadius: 9999,
+            fontFamily: "var(--font-montserrat)",
+            fontWeight: 800,
+            fontSize: "0.875rem",
+            letterSpacing: "0.08em",
+            cursor: "pointer",
+            boxShadow: "0 8px 32px rgba(255,107,74,0.45)",
+            textTransform: "uppercase",
+          }}
+          whileHover={{ scale: 1.06, boxShadow: "0 12px 48px rgba(255,107,74,0.55)" }}
+          whileTap={{ scale: 0.96 }}
         >
-          <button
-            className="group relative flex items-center gap-3 bg-accent text-accent-foreground px-8 py-4 rounded-full font-bold shadow-2xl hover:bg-foreground hover:text-background transition-all duration-500 overflow-hidden"
-            onClick={() => alert("Booking System Coming Soon!")}
-          >
-            <span className="relative z-10">BOOK YOUR EVENT</span>
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-            
-            <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-            </div>
-          </button>
-        </motion.div>
+          <span>Book Event</span>
+          <span style={{ fontSize: "1.1rem" }}>✦</span>
+        </motion.button>
       )}
     </AnimatePresence>
   );

@@ -1,0 +1,68 @@
+[
+  {
+    "id": "basic",
+    "name": "Basic",
+    "tagline": "Essential & Elegant",
+    "description": "Essential coordination for intimate family gatherings.",
+    "price": "Starts at ₹3,00,000",
+    "color": "#0D0D0D",
+    "popular": false,
+    "features": [
+      "Up to 50 Guests",
+      "Venue Selection",
+      "Basic Decor Setup",
+      "On-Day Support",
+      "Timeline Planning"
+    ]
+  },
+  {
+    "id": "silver",
+    "name": "Silver",
+    "tagline": "Best Value",
+    "description": "The perfect balance of elegance and affordability.",
+    "price": "Starts at ₹7,00,000",
+    "color": "#6B7280",
+    "popular": false,
+    "tag": "Best Value",
+    "features": [
+      "Up to 150 Guests",
+      "Full Decor & Styling",
+      "Sound & Essential Lighting",
+      "Vendor Coordination",
+      "Guest Management"
+    ]
+  },
+  {
+    "id": "gold",
+    "name": "Gold",
+    "tagline": "Most Requested",
+    "description": "Our signature luxury experience for grand celebrations.",
+    "price": "Starts at ₹15,00,000",
+    "color": "#FF6B4A",
+    "popular": true,
+    "tag": "Most Requested",
+    "features": [
+      "Up to 400 Guests",
+      "Bespoke Floral Design",
+      "Cinematic Lighting & AV",
+      "Full Weekend Coordination",
+      "Premium Catering Setup"
+    ]
+  },
+  {
+    "id": "diamond",
+    "name": "Diamond",
+    "tagline": "Ultimate Royalty",
+    "description": "The pinnacle of royal luxury and bespoke service.",
+    "price": "Custom",
+    "color": "#1E1E2E",
+    "popular": false,
+    "features": [
+      "Unlimited Guests",
+      "Global Destination Planning",
+      "Celebrity Entertainment",
+      "Custom Set Construction",
+      "24/7 Dedicated Concierge"
+    ]
+  }
+]

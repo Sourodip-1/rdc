@@ -19,9 +19,9 @@ export default function Navbar() {
     { name: "Services", href: "#" },
     { name: "Our Work", href: "#" },
     { name: "Pricing", href: "#" },
+    { name: "Our Venues", href: "#" },
     { name: "About us", href: "#" },
     { name: "Blog", href: "#" },
-    { name: "Our Venus", href: "#" },
   ];
 
   return (
@@ -30,11 +30,10 @@ export default function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`pointer-events-auto flex items-center justify-between gap-8 px-8 py-3 rounded-full border border-border shadow-2xl transition-all duration-700 ${
-          isScrolled
-            ? "bg-[#FDFBF7]/80 backdrop-blur-2xl w-full max-w-6xl py-4"
-            : "bg-[#FDFBF7]/40 backdrop-blur-md w-full max-w-7xl py-6"
-        }`}
+        className={`pointer-events-auto flex items-center justify-between gap-8 px-8 py-3 rounded-full border border-border shadow-2xl transition-all duration-700 ${isScrolled
+          ? "bg-[#FDFBF7]/80 backdrop-blur-2xl w-full max-w-6xl py-4"
+          : "bg-[#FDFBF7]/40 backdrop-blur-md w-full max-w-7xl py-6"
+          }`}
       >
         <Link href="/" className="text-xl md:text-2xl font-premium font-black tracking-tighter text-foreground group whitespace-nowrap">
           ROYAL <span className="text-accent group-hover:text-foreground transition-colors duration-500">DESI</span> CREW
@@ -54,7 +53,7 @@ export default function Navbar() {
             ))}
           </div>
           <Link
-            href="#"
+            href="/book"
             className="px-6 py-2.5 bg-accent text-white rounded-full text-[10px] font-black tracking-widest hover:bg-foreground transition-all duration-500 shadow-lg shadow-accent/20 whitespace-nowrap"
           >
             BOOK NOW
