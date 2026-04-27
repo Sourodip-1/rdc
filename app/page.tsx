@@ -1,7 +1,10 @@
-import Navbar1 from "@/components/ui/navbar-1";
 import Hero from "./components/Hero";
 import Carousel from "./components/Carousel";
+import ServicesSection from "./components/ServicesSection";
+import { HeroGalleryDemo } from "@/components/blocks/HeroGalleryDemo";
+import { CreativePricingDemo } from "@/components/CreativePricingDemo";
 import FloatingBookButton from "./components/FloatingBookButton";
+import Navbar1 from "@/components/ui/navbar-1";
 
 export default function Home() {
   return (
@@ -12,42 +15,12 @@ export default function Home() {
       <Hero />
       
       <Carousel />
-      
-      {/* Services Preview Section */}
-      <section className="py-32 px-6 container mx-auto">
-        <div className="grid md:grid-cols-2 gap-20 items-center">
-          <div>
-            <h2 className="text-5xl font-premium font-bold mb-8">Our <span className="text-accent italic">Services</span></h2>
-            <p className="text-lg text-foreground/70 mb-12 max-w-lg leading-relaxed">
-              From grand royal weddings to sophisticated corporate galas, we bring your vision to life with precision, elegance, and a touch of the extraordinary.
-            </p>
-            <div className="space-y-6">
-              {['Royal Weddings', 'Corporate Galas', 'Cultural Festivals', 'Private Celebrations'].map((service) => (
-                <div key={service} className="flex items-center gap-4 group cursor-pointer">
-                  <div className="w-12 h-0.5 bg-accent group-hover:w-20 transition-all duration-500" />
-                  <span className="text-xl font-medium group-hover:text-accent transition-colors">{service}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="relative">
-            <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-700">
-              <img 
-                src="https://images.unsplash.com/photo-1519222970733-f546218fa6d7?q=80&w=2070&auto=format&fit=crop" 
-                alt="Service Decoration" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="absolute -bottom-10 -left-10 w-64 aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-[#FDFBF7] transform -rotate-3 hover:rotate-0 transition-transform duration-700 hidden lg:block">
-              <img 
-                src="https://images.unsplash.com/photo-1544078751-58fee2d8a03b?q=80&w=2070&auto=format&fit=crop" 
-                alt="Detail" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+
+      <ServicesSection />
+
+      <HeroGalleryDemo />
+
+      <CreativePricingDemo />
 
       {/* Philosophy Section */}
       <section className="py-32 bg-foreground text-background">
