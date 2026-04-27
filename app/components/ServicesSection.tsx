@@ -59,13 +59,6 @@ const SERVICES = [
     tag: "Legacy Series",
     imageUrl: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=2070&auto=format&fit=crop",
   },
-  {
-    number: "09",
-    title: "Retirement & Milestone Celebrations",
-    description: "Grand finales designed with dignity, warmth, and the grandeur a life well-lived deserves.",
-    tag: "Grand Finale",
-    imageUrl: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2074&auto=format&fit=crop",
-  },
 ];
 
 const cardVariants: Variants = {

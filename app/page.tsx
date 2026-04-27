@@ -8,6 +8,7 @@ import Carousel from "./components/Carousel";
 import FloatingBookButton from "./components/FloatingBookButton";
 import { StaggerTestimonials } from "@/components/ui/stagger-testimonials";
 import VenuesModal from "./components/VenuesModal";
+import CaterersModal from "./components/CaterersModal";
 
 const S = {
   maxW: { maxWidth: 1200, margin: "0 auto", width: "100%", padding: "0 32px" },
@@ -18,10 +19,14 @@ const S = {
 import PricingSection from "./components/PricingSection";
 import ServicesSection from "./components/ServicesSection";
 import GallerySection from "./components/GallerySection";
+import AboutSection from "./components/AboutSection";
 import Footer from "./components/Footer";
+import services from "@/data/services.json";
+import caterers from "@/data/caterers.json";
 
 export default function Home() {
   const [isVenuesModalOpen, setIsVenuesModalOpen] = useState(false);
+  const [isCaterersModalOpen, setIsCaterersModalOpen] = useState(false);
 
   return (
     <main style={{ background: S.bg, overflowX: "hidden" }}>
@@ -71,10 +76,10 @@ export default function Home() {
         {/* ── Venues ── */}
         <section id="venues" style={{ padding: "120px 32px", background: S.bg, borderRadius: "80px 80px 0 0", position: "relative", zIndex: 10 }}>
           <div style={S.maxW}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24, marginBottom: 72 }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 24, marginBottom: 72 }}>
               <div>
-                <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 24 }}>Handpicked Spaces</p>
-                <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(40px,5vw,68px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1 }}>Our Venues</h2>
+                <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 20 }}>Handpicked Spaces</p>
+                <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(40px,5vw,68px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1 }}>Our <em style={{ fontStyle: "italic", color: S.accent }}>Venues</em></h2>
               </div>
               <button 
                 onClick={() => setIsVenuesModalOpen(true)}
@@ -117,6 +122,53 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* ── Caterers ── */}
+        <section id="caterers" style={{ padding: "0 32px 120px 32px", background: S.bg, position: "relative", zIndex: 10 }}>
+          <div style={S.maxW}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 24, marginBottom: 72 }}>
+              <div>
+                <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 20 }}>Culinary Excellence</p>
+                <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(40px,5vw,68px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1 }}>Our <em style={{ fontStyle: "italic", color: S.accent }}>Caterers</em></h2>
+              </div>
+              <button 
+                onClick={() => setIsCaterersModalOpen(true)}
+                style={{
+                  fontFamily: "var(--font-montserrat)",
+                  fontWeight: 700,
+                  fontSize: "0.8rem",
+                  color: S.fg,
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "0 0 8px 0",
+                }}
+              >
+                VIEW ALL CATERERS <span>→</span>
+              </button>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
+              {caterers.slice(0, 3).map((c, i) => (
+                <div key={i} style={{ borderRadius: 28, overflow: "hidden", aspectRatio: "3/4", position: "relative", cursor: "pointer", boxShadow: "0 24px 60px rgba(0,0,0,0.1)" }}>
+                  <img src={c.coverImage} alt={c.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
+                    onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
+                    onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+                  />
+                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
+                  <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
+                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{c.tag}</p>
+                    <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{c.name}</h3>
+                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Menu ↗</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <GallerySection />
         <PricingSection />
       </div>
@@ -124,7 +176,7 @@ export default function Home() {
       {/* Scoped Dark Background for Inverse Rounding transition */}
       <div style={{ background: S.fg }}>
         {/* ── Contact ── */}
-        <section style={{ padding: "120px 32px", background: "#fff", position: "relative", zIndex: 10 }}>
+        <section id="contact" style={{ padding: "120px 32px", background: "#fff", position: "relative", zIndex: 10 }}>
           <div style={{ ...S.maxW, maxWidth: 760 }}>
             <div style={{ textAlign: "center", marginBottom: 64 }}>
               <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 24 }}>Get In Touch</p>
@@ -139,6 +191,7 @@ export default function Home() {
               {[
                 { id: "name", label: "Full Name", placeholder: "John Doe", type: "text", col: 1 },
                 { id: "email", label: "Email Address", placeholder: "john@example.com", type: "email", col: 1 },
+                { id: "phone", label: "Phone Number", placeholder: "+91 98765 43210", type: "tel", col: 1 },
               ].map(f => (
                 <div key={f.id} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   <label htmlFor={f.id} style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(13,13,13,0.45)" }}>{f.label}</label>
@@ -149,6 +202,19 @@ export default function Home() {
                   />
                 </div>
               ))}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <label htmlFor="event" style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(13,13,13,0.45)" }}>Select Your Event</label>
+                <select id="event" defaultValue=""
+                  style={{ width: "100%", padding: "16px 20px", borderRadius: 16, border: "1.5px solid rgba(0,0,0,0.09)", background: "#fff", fontFamily: "var(--font-montserrat)", fontSize: "0.95rem", color: S.fg, outline: "none", transition: "border-color 0.2s" }}
+                  onFocus={e => (e.currentTarget.style.borderColor = S.accent)}
+                  onBlur={e => (e.currentTarget.style.borderColor = "rgba(0,0,0,0.09)")}
+                >
+                  <option value="" disabled>Choose an event type...</option>
+                  {services.map(s => (
+                    <option key={s.id} value={s.id}>{s.name}</option>
+                  ))}
+                </select>
+              </div>
               <div style={{ gridColumn: "1/-1", display: "flex", flexDirection: "column", gap: 8 }}>
                 <label htmlFor="message" style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(13,13,13,0.45)" }}>Your Vision</label>
                 <textarea id="message" placeholder="Describe your event..." rows={5}
@@ -179,12 +245,20 @@ export default function Home() {
           <StaggerTestimonials />
         </section>
 
-        {/* ── Footer ── */}
-        <Footer />
+        {/* ── About Us & Footer Wrapper for Inverse Curve ── */}
+        <div style={{ background: S.fg }}>
+          <section id="about">
+            <AboutSection />
+          </section>
+
+          {/* ── Footer ── */}
+          <Footer variant="light" />
+        </div>
       </div>
 
       <FloatingBookButton />
       <VenuesModal isOpen={isVenuesModalOpen} onClose={() => setIsVenuesModalOpen(false)} />
+      <CaterersModal isOpen={isCaterersModalOpen} onClose={() => setIsCaterersModalOpen(false)} />
     </main>
   );
 }

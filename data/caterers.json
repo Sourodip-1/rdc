@@ -1,0 +1,58 @@
+[
+  {
+    "id": "royal-feast",
+    "name": "Royal Feast",
+    "tag": "Traditional Delicacies",
+    "description": "Authentic North Indian and Mughlai cuisine, fit for kings.",
+    "coverImage": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "global-palate",
+    "name": "Global Palate",
+    "tag": "International Flavors",
+    "description": "A refined fusion of Continental and Mediterranean dishes.",
+    "coverImage": "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "spice-route",
+    "name": "Spice Route",
+    "tag": "Authentic Southern",
+    "description": "A flavor-packed culinary journey through South India.",
+    "coverImage": "https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "sweet-beginnings",
+    "name": "Sweet Beginnings",
+    "tag": "Artisanal Treats",
+    "description": "Gourmet desserts, high tea selections, and custom cakes.",
+    "coverImage": "https://images.unsplash.com/photo-1559525839-b184a4d698c7?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "coastal-catch",
+    "name": "Coastal Catch",
+    "tag": "Seafood Specialties",
+    "description": "Exquisite seafood dishes capturing the essence of the coast.",
+    "coverImage": "https://images.unsplash.com/photo-1548943487-a2e4143fa6ce?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "green-leaf",
+    "name": "Green Leaf",
+    "tag": "Pure Vegetarian",
+    "description": "A delightful array of pure vegetarian and vegan masterpieces.",
+    "coverImage": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "street-eats",
+    "name": "Street Eats",
+    "tag": "Premium Chaat",
+    "description": "Elevated Indian street food and live chaat counters.",
+    "coverImage": "https://images.unsplash.com/photo-1606491956689-2ea866880c84?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "grand-grill",
+    "name": "The Grand Grill",
+    "tag": "Live Barbecue",
+    "description": "Sizzling kebabs, tikkas, and live barbecue stations.",
+    "coverImage": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1200&auto=format&fit=crop"
+  }
+]

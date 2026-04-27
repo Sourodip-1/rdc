@@ -275,8 +275,12 @@ export default function Hero() {
             justifyContent: "center",
           }}
         >
-          <Link
-            href="#"
+          <a
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+            }}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -314,7 +318,7 @@ export default function Hero() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
-          </Link>
+          </a>
           <Link
             href="#"
             style={{

@@ -26,7 +26,8 @@ export default function Footer({ variant = "dark" }: FooterProps) {
       marginTop: "0", 
       position: "relative", 
       zIndex: 1,
-      boxShadow: isLight ? "0 -20px 60px rgba(0,0,0,0.05)" : "none"
+      boxShadow: isLight ? "0 -20px 60px rgba(0,0,0,0.05)" : "none",
+      borderRadius: isLight ? "80px 80px 0 0" : "0"
     }}>
       <div style={{ ...S.maxW, display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 48, marginBottom: 64 }}>
         <div style={{ maxWidth: 320 }}>
@@ -43,14 +44,36 @@ export default function Footer({ variant = "dark" }: FooterProps) {
         </div>
         <div style={{ display: "flex", gap: 64, flexWrap: "wrap" }}>
           {[
-            { title: "Contact", items: ["hello@royaldesicrew.com", "+1 (234) 567-890"] },
-            { title: "Follow", items: ["Instagram", "Facebook", "YouTube"] },
-            { title: "Company", items: ["Services", "Our Work", "About Us"] },
+            { 
+              title: "Contact", 
+              items: [
+                { label: "royaldesicrew@gmail.com", href: "mailto:royaldesicrew@gmail.com" }, 
+                { label: "9614028424", href: "tel:9614028424" }
+              ] 
+            },
+            { 
+              title: "Follow", 
+              items: [
+                { label: "Instagram", href: "https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=qsk0zbe", target: "_blank", rel: "noopener noreferrer" }, 
+                { label: "Facebook", href: "https://www.facebook.com/share/18Wf7t6mSo/", target: "_blank", rel: "noopener noreferrer" }, 
+                { label: "YouTube", href: "https://youtube.com/@royaldesicrewevent2.0?si=U-kKXlX4Vs75ptSL", target: "_blank", rel: "noopener noreferrer" }
+              ] 
+            },
+            { 
+              title: "Company", 
+              items: [
+                { label: "Services", href: "#" }, 
+                { label: "Our Work", href: "#" }, 
+                { label: "About Us", href: "#" }
+              ] 
+            },
           ].map(col => (
             <div key={col.title} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <h4 style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: S.accent }}>{col.title}</h4>
               {col.items.map(item => (
-                <p key={item} style={{ fontFamily: "var(--font-montserrat)", fontSize: "0.9rem", color: textColor, cursor: "pointer", transition: "color 0.2s" }}>{item}</p>
+                <a key={item.label} href={item.href} target={item.target} rel={item.rel} style={{ textDecoration: "none", fontFamily: "var(--font-montserrat)", fontSize: "0.9rem", color: textColor, cursor: "pointer", transition: "color 0.2s" }}>
+                  {item.label}
+                </a>
               ))}
             </div>
           ))}

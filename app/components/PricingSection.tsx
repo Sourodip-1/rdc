@@ -86,7 +86,7 @@ export default function PricingSection() {
                         lineHeight: 1.1,
                         color: "#0D0D0D"
                     }}>
-                        The Royal <em style={{ fontStyle: "italic", color: "var(--accent)" }}>Investment</em>
+                        Our <em style={{ fontStyle: "italic", color: "var(--accent)" }}>Packages</em>
                     </h2>
                 </div>
 
