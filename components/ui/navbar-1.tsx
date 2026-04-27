@@ -8,116 +8,197 @@ import Link from "next/link";
 
 const Navbar1 = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-
   const navLinks = [
-    { name: "Services", href: "#" },
-    { name: "Our Work", href: "#" },
-    { name: "Pricing", href: "#" },
-    { name: "About us", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Our Venus", href: "#" },
+    { name: "Services", href: "/#services" },
+    { name: "Our Work", href: "/#work" },
+    { name: "Pricing", href: "/#pricing" },
+    { name: "About Us", href: "/about" },
+    { name: "Our Venues", href: "/#venues" },
+    { name: "Blog", href: "/blog" },
   ];
 
   return (
-    <div className="fixed top-10 left-0 w-full z-[100] flex justify-center px-6 pointer-events-none">
-      <motion.div 
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className={`pointer-events-auto flex items-center justify-between px-10 py-5 bg-white rounded-full shadow-2xl w-full max-w-7xl relative z-10 transition-all duration-700 ${
-          isScrolled ? "scale-[0.98] shadow-3xl bg-white/95" : "scale-100"
-        }`}
+    <>
+      <div
+        className="fixed top-0 left-0 w-full z-[100] flex justify-center"
+        style={{ padding: "20px 24px" }}
       >
-        <div className="flex items-center gap-6">
-          {/* Logo Circle */}
-          <motion.div
-            className="w-12 h-12 flex-shrink-0"
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            whileHover={{ rotate: 10 }}
-            transition={{ duration: 0.3 }}
-          >
-            <svg width="48" height="48" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="16" cy="16" r="16" fill="url(#paint0_linear)" />
-              <defs>
-                <linearGradient id="paint0_linear" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#FF9966" />
-                  <stop offset="1" stopColor="#FF5E62" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </motion.div>
-          
-          <Link href="/" className="text-2xl font-premium font-black tracking-tight text-foreground whitespace-nowrap hidden md:block">
-            ROYAL <span className="text-accent">DESI</span>
-          </Link>
-        </div>
-        
-        {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center justify-center gap-x-10 px-8">
-          {navLinks.map((item) => (
+        <motion.div
+          initial={{ y: -80, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          style={{
+            background: scrolled
+              ? "rgba(253,251,247,0.88)"
+              : "rgba(255,255,255,0.95)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            borderRadius: "9999px",
+            boxShadow: scrolled
+              ? "0 8px 40px rgba(0,0,0,0.10), 0 1px 0 rgba(0,0,0,0.05)"
+              : "0 4px 24px rgba(0,0,0,0.07), 0 1px 0 rgba(0,0,0,0.04)",
+            border: "1px solid rgba(0,0,0,0.06)",
+            transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
+            width: "100%",
+            maxWidth: "1200px",
+            display: "flex",
+            alignItems: "center",
+            padding: "10px 10px 10px 20px",
+          }}
+        >
+          {/* ── Left: Logo ── */}
+          <div style={{ display: "flex", alignItems: "center", flex: 1 }}>
+            <Link href="/" style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src="/image.png"
+                alt="Royal Desi Crew"
+                style={{ height: "65px", width: "auto", objectFit: "contain" }}
+              />
+            </Link>
+          </div>
+
+          {/* ── Center: Nav Links ── */}
+          <nav className="hidden lg:flex" style={{ gap: "0px" }}>
+            {navLinks.map((item) => (
+              <motion.div key={item.name} whileHover={{ y: -1 }} transition={{ duration: 0.15 }}>
+                <Link
+                  href={item.href}
+                  style={{
+                    padding: "8px 18px",
+                    fontFamily: "var(--font-montserrat)",
+                    fontWeight: 600,
+                    fontSize: "0.875rem",
+                    color: "#0D0D0D",
+                    textDecoration: "none",
+                    whiteSpace: "nowrap",
+                    letterSpacing: "0.01em",
+                    transition: "color 0.2s",
+                    display: "block",
+                    borderRadius: "9999px",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#0D0D0D")}
+                >
+                  {item.name}
+                </Link>
+              </motion.div>
+            ))}
+          </nav>
+
+          {/* ── Right: CTA Button ── */}
+          <div className="flex" style={{ flex: 1, justifyContent: "flex-end" }}>
             <motion.div
-              key={item.name}
-              whileHover={{ y: -2 }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              style={{ marginRight: "16px" }}
             >
-              <Link 
-                href={item.href} 
-                className="text-[15px] text-gray-900 hover:text-accent transition-colors font-bold whitespace-nowrap tracking-wide"
+              <Link
+                href="/book"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "12px 28px",
+                  background: "#0D0D0D",
+                  color: "#fff",
+                  borderRadius: "9999px",
+                  fontFamily: "var(--font-montserrat)",
+                  fontWeight: 700,
+                  fontSize: "0.875rem",
+                  letterSpacing: "0.04em",
+                  textDecoration: "none",
+                  whiteSpace: "nowrap",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.18)",
+                  transition: "background 0.3s",
+                }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.background = "var(--accent)")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.background = "#0D0D0D")}
               >
-                {item.name}
+                Book Now
               </Link>
             </motion.div>
-          ))}
-        </nav>
+          </div>
 
-        {/* Desktop CTA Button */}
-        <div className="hidden lg:block">
-          <Link
-            href="#"
-            className="inline-flex items-center justify-center px-10 py-4 text-sm text-white bg-black rounded-full hover:bg-gray-800 transition-all duration-300 font-bold whitespace-nowrap shadow-xl"
+          {/* ── Mobile Hamburger ── */}
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setIsOpen(!isOpen)}
+            className="lg:hidden"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 44,
+              height: 44,
+              borderRadius: "50%",
+              background: "#F5F2EE",
+              border: "none",
+              cursor: "pointer",
+              marginRight: 4,
+            }}
           >
-            Book Now
-          </Link>
-        </div>
+            {isOpen ? (
+              <X size={20} color="#0D0D0D" />
+            ) : (
+              <Menu size={20} color="#0D0D0D" />
+            )}
+          </motion.button>
+        </motion.div>
+      </div>
 
-        {/* Mobile Menu Button */}
-        <motion.button className="lg:hidden flex items-center p-3 rounded-full bg-gray-50" onClick={toggleMenu} whileTap={{ scale: 0.9 }}>
-          {isOpen ? <X className="h-7 w-7 text-gray-900" /> : <Menu className="h-7 w-7 text-gray-900" />}
-        </motion.button>
-      </motion.div>
-
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 bg-white z-50 pt-32 px-10 lg:hidden pointer-events-auto"
+            key="mobile-menu"
             initial={{ opacity: 0, y: "-100%" }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: "-100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            transition={{ type: "spring", damping: 28, stiffness: 220 }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "#FDFBF7",
+              zIndex: 90,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              padding: "140px 40px 40px 40px",
+              overflowY: "auto",
+            }}
           >
-            <div className="flex flex-col gap-8">
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
               {navLinks.map((item, i) => (
                 <motion.div
                   key={item.name}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: i * 0.06, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <Link
                     href={item.href}
-                    className="text-3xl font-bold text-gray-900 hover:text-accent transition-colors block"
-                    onClick={toggleMenu}
+                    onClick={() => setIsOpen(false)}
+                    style={{
+                      fontFamily: "var(--font-playfair)",
+                      fontWeight: 700,
+                      fontSize: "clamp(1.8rem, 6vw, 2.2rem)",
+                      color: "#0D0D0D",
+                      textDecoration: "none",
+                      display: "block",
+                      padding: "12px 0",
+                      borderBottom: "1px solid rgba(0,0,0,0.06)",
+                      transition: "color 0.2s",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#0D0D0D")}
                   >
                     {item.name}
                   </Link>
@@ -126,13 +207,24 @@ const Navbar1 = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="pt-6"
+                transition={{ delay: 0.4 }}
+                style={{ marginTop: "32px" }}
               >
                 <Link
-                  href="#"
-                  className="inline-block w-full py-6 bg-black text-white text-center rounded-full font-bold text-xl shadow-2xl"
-                  onClick={toggleMenu}
+                  href="/book"
+                  onClick={() => setIsOpen(false)}
+                  style={{
+                    display: "block",
+                    textAlign: "center",
+                    padding: "18px 0",
+                    background: "#0D0D0D",
+                    color: "#fff",
+                    borderRadius: "9999px",
+                    fontFamily: "var(--font-montserrat)",
+                    fontWeight: 700,
+                    fontSize: "1.1rem",
+                    textDecoration: "none",
+                  }}
                 >
                   Book Now
                 </Link>
@@ -141,7 +233,7 @@ const Navbar1 = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 };
 

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "grand-ballroom",
+    "name": "Grand Ballroom",
+    "tag": "Capacity: 800+",
+    "description": "Our flagship ballroom for the most prestigious events.",
+    "coverImage": "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "lakeside-garden",
+    "name": "Lakeside Garden",
+    "tag": "Outdoor Luxury",
+    "description": "Romantic outdoor setting with stunning water views.",
+    "coverImage": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "skyline-lounge",
+    "name": "Skyline Lounge",
+    "tag": "City Views",
+    "description": "Modern rooftop lounge perfect for corporate mixers.",
+    "coverImage": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "royal-palace",
+    "name": "Royal Palace Hall",
+    "tag": "Heritage Charm",
+    "description": "A majestic hall that echoes with historical grandeur.",
+    "coverImage": "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "heritage-courtyard",
+    "name": "Heritage Courtyard",
+    "tag": "Al Fresco",
+    "description": "Traditional open-air courtyard for cultural celebrations.",
+    "coverImage": "https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=1200&auto=format&fit=crop"
+  },
+  {
+    "id": "glasshouse",
+    "name": "Modern Glasshouse",
+    "tag": "Sun-drenched",
+    "description": "Contemporary glass structure surrounded by lush greenery.",
+    "coverImage": "https://images.unsplash.com/photo-1473177104440-ffe2f376098c?q=80&w=1200&auto=format&fit=crop"
+  }
+]

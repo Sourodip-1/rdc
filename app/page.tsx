@@ -1,163 +1,190 @@
+"use client";
+
+import { useState } from "react";
+
 import Navbar1 from "@/components/ui/navbar-1";
 import Hero from "./components/Hero";
 import Carousel from "./components/Carousel";
 import FloatingBookButton from "./components/FloatingBookButton";
+import { StaggerTestimonials } from "@/components/ui/stagger-testimonials";
+import VenuesModal from "./components/VenuesModal";
+
+const S = {
+  maxW: { maxWidth: 1200, margin: "0 auto", width: "100%", padding: "0 32px" },
+  accent: "#FF6B4A",
+  fg: "#0D0D0D",
+  bg: "#FDFBF7",
+};
+import PricingSection from "./components/PricingSection";
+import ServicesSection from "./components/ServicesSection";
+import GallerySection from "./components/GallerySection";
+import Footer from "./components/Footer";
 
 export default function Home() {
-  return (
-    <main className="relative min-h-screen">
-      <Navbar1 />
+  const [isVenuesModalOpen, setIsVenuesModalOpen] = useState(false);
 
-      
+  return (
+    <main style={{ background: S.bg, overflowX: "hidden" }}>
+      <Navbar1 />
       <Hero />
-      
       <Carousel />
-      
-      {/* Services Preview Section */}
-      <section className="py-32 px-6 container mx-auto">
-        <div className="grid md:grid-cols-2 gap-20 items-center">
-          <div>
-            <h2 className="text-5xl font-premium font-bold mb-8">Our <span className="text-accent italic">Services</span></h2>
-            <p className="text-lg text-foreground/70 mb-12 max-w-lg leading-relaxed">
-              From grand royal weddings to sophisticated corporate galas, we bring your vision to life with precision, elegance, and a touch of the extraordinary.
-            </p>
-            <div className="space-y-6">
-              {['Royal Weddings', 'Corporate Galas', 'Cultural Festivals', 'Private Celebrations'].map((service) => (
-                <div key={service} className="flex items-center gap-4 group cursor-pointer">
-                  <div className="w-12 h-0.5 bg-accent group-hover:w-20 transition-all duration-500" />
-                  <span className="text-xl font-medium group-hover:text-accent transition-colors">{service}</span>
+
+      <div style={{ background: S.fg }}>
+        <div style={{ borderRadius: "0 0 80px 80px", overflow: "hidden", position: "relative", zIndex: 10 }}>
+          <ServicesSection />
+        </div>
+      </div>
+
+      {/* ── Philosophy ── */}
+      <section style={{ padding: "120px 32px", background: S.fg, position: "relative", overflow: "hidden", zIndex: 5 }}>
+        <div aria-hidden="true" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(100px,18vw,280px)", color: "rgba(255,107,74,0.06)", letterSpacing: "-0.06em", whiteSpace: "nowrap", userSelect: "none", pointerEvents: "none" }}>
+          DESI
+        </div>
+        <div style={{ ...S.maxW, textAlign: "center", position: "relative", zIndex: 1 }}>
+          <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 24 }}>
+          </p>
+          <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(36px,5.5vw,72px)", lineHeight: 1.05, letterSpacing: "-0.03em", color: "#fff", marginBottom: 40 }}>
+            Why Choose<em style={{ fontStyle: "italic", fontWeight: 400, color: S.accent }}> Royal</em> Desi Crew ?
+          </h2>
+          <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 300, fontSize: "clamp(16px,1.8vw,22px)", color: "rgba(255,255,255,0.65)", maxWidth: 760, margin: "0 auto 48px", lineHeight: 1.8 }}>
+            &ldquo;We’re not just an event company—we’re the team that brings your vision to life.&rdquo;
+          </p>
+          <div style={{ fontFamily: "var(--font-playfair)", fontStyle: "italic", fontSize: "1.2rem", color: S.accent }}>— Royal Desi Crew Event & Entertainment.</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24, marginTop: 80 }}>
+            {[
+              { icon: "✦", title: "Vision", desc: "Every detail is curated with purpose and intention." },
+              { icon: "◈", title: "Precision", desc: "Flawless execution, from concept to celebration." },
+              { icon: "❋", title: "Legacy", desc: "Creating memories that last a lifetime and beyond." },
+            ].map(c => (
+              <div key={c.title} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 24, padding: 40, textAlign: "left" }}>
+                <div style={{ fontSize: "1.5rem", color: S.accent, marginBottom: 16 }}>{c.icon}</div>
+                <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.3rem", color: "#fff", marginBottom: 12 }}>{c.title}</h3>
+                <p style={{ fontFamily: "var(--font-montserrat)", fontSize: "0.9rem", color: "rgba(255,255,255,0.5)", lineHeight: 1.7 }}>{c.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Scoped background for inverse curve */}
+      <div style={{ background: S.fg }}>
+        {/* ── Venues ── */}
+        <section id="venues" style={{ padding: "120px 32px", background: S.bg, borderRadius: "80px 80px 0 0", position: "relative", zIndex: 10 }}>
+          <div style={S.maxW}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 24, marginBottom: 72 }}>
+              <div>
+                <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 24 }}>Handpicked Spaces</p>
+                <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(40px,5vw,68px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1 }}>Our Venues</h2>
+              </div>
+              <button 
+                onClick={() => setIsVenuesModalOpen(true)}
+                style={{
+                  fontFamily: "var(--font-montserrat)",
+                  fontWeight: 700,
+                  fontSize: "0.8rem",
+                  color: S.fg,
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "0 0 8px 0",
+                }}
+              >
+                VIEW ALL VENUES <span>→</span>
+              </button>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
+              {[
+                { name: "Grand Ballroom", tag: "Capacity: 800+", img: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2074&auto=format&fit=crop" },
+                { name: "Lakeside Garden", tag: "Outdoor Luxury", img: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=2069&auto=format&fit=crop" },
+                { name: "Skyline Lounge", tag: "City Views", img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070&auto=format&fit=crop" },
+              ].map((v, i) => (
+                <div key={i} style={{ borderRadius: 28, overflow: "hidden", aspectRatio: "3/4", position: "relative", cursor: "pointer", boxShadow: "0 24px 60px rgba(0,0,0,0.1)" }}>
+                  <img src={v.img} alt={v.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
+                    onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
+                    onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+                  />
+                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
+                  <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
+                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{v.tag}</p>
+                    <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{v.name}</h3>
+                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Venue ↗</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-          <div className="relative">
-            <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-700">
-              <img 
-                src="https://images.unsplash.com/photo-1519222970733-f546218fa6d7?q=80&w=2070&auto=format&fit=crop" 
-                alt="Service Decoration" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="absolute -bottom-10 -left-10 w-64 aspect-square rounded-2xl overflow-hidden shadow-2xl border-8 border-[#FDFBF7] transform -rotate-3 hover:rotate-0 transition-transform duration-700 hidden lg:block">
-              <img 
-                src="https://images.unsplash.com/photo-1544078751-58fee2d8a03b?q=80&w=2070&auto=format&fit=crop" 
-                alt="Detail" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+        <GallerySection />
+        <PricingSection />
+      </div>
 
-      {/* Philosophy Section */}
-      <section className="py-32 bg-foreground text-background">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-6xl font-premium font-bold mb-12">The <span className="text-accent">Royal</span> Philosophy</h2>
-          <p className="text-xl md:text-2xl font-light max-w-4xl mx-auto leading-relaxed opacity-80">
-            "We believe that every celebration is a story waiting to be told. Our mission is to write those stories with gold, elegance, and soul."
-          </p>
-          <div className="mt-16 text-accent font-premium text-2xl italic">— Royal Desi Crew</div>
-        </div>
-      </section>
-
-      {/* Venus / Venues Preview */}
-      <section className="py-32 px-6 container mx-auto">
-        <div className="text-center mb-20">
-          <h2 className="text-5xl font-premium font-bold mb-4">Our Venus</h2>
-          <div className="w-24 h-1 bg-accent mx-auto" />
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            { name: "Grand Ballroom", img: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2074&auto=format&fit=crop" },
-            { name: "Lakeside Garden", img: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=2069&auto=format&fit=crop" },
-            { name: "Skyline Lounge", img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070&auto=format&fit=crop" }
-          ].map((venue, i) => (
-            <div key={i} className="group relative aspect-[3/4] overflow-hidden rounded-2xl cursor-pointer">
-              <img src={venue.img} alt={venue.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-500" />
-              <div className="absolute bottom-0 left-0 p-8">
-                <h3 className="text-2xl font-premium text-white">{venue.name}</h3>
-                <p className="text-accent font-medium mt-2">Explore Venue</p>
+      {/* Scoped Dark Background for Inverse Rounding transition */}
+      <div style={{ background: S.fg }}>
+        {/* ── Contact ── */}
+        <section style={{ padding: "120px 32px", background: "#fff", position: "relative", zIndex: 10 }}>
+          <div style={{ ...S.maxW, maxWidth: 760 }}>
+            <div style={{ textAlign: "center", marginBottom: 64 }}>
+              <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 24 }}>Get In Touch</p>
+              <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(36px,5vw,64px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1.05, marginBottom: 20 }}>
+                Start Your <em style={{ fontStyle: "italic", fontWeight: 400, color: S.accent }}>Journey</em>
+              </h2>
+              <p style={{ fontFamily: "var(--font-montserrat)", fontSize: "1rem", color: "rgba(13,13,13,0.5)", lineHeight: 1.75 }}>
+                Tell us about your dream event, and let&apos;s make it a royal reality.
+              </p>
+            </div>
+            <form style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, background: S.bg, padding: 48, borderRadius: 32, boxShadow: "0 32px 80px rgba(0,0,0,0.07)", border: "1px solid rgba(0,0,0,0.05)" }}>
+              {[
+                { id: "name", label: "Full Name", placeholder: "John Doe", type: "text", col: 1 },
+                { id: "email", label: "Email Address", placeholder: "john@example.com", type: "email", col: 1 },
+              ].map(f => (
+                <div key={f.id} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <label htmlFor={f.id} style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(13,13,13,0.45)" }}>{f.label}</label>
+                  <input id={f.id} type={f.type} placeholder={f.placeholder}
+                    style={{ width: "100%", padding: "16px 20px", borderRadius: 16, border: "1.5px solid rgba(0,0,0,0.09)", background: "#fff", fontFamily: "var(--font-montserrat)", fontSize: "0.95rem", color: S.fg, outline: "none", transition: "border-color 0.2s" }}
+                    onFocus={e => (e.currentTarget.style.borderColor = S.accent)}
+                    onBlur={e => (e.currentTarget.style.borderColor = "rgba(0,0,0,0.09)")}
+                  />
+                </div>
+              ))}
+              <div style={{ gridColumn: "1/-1", display: "flex", flexDirection: "column", gap: 8 }}>
+                <label htmlFor="message" style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(13,13,13,0.45)" }}>Your Vision</label>
+                <textarea id="message" placeholder="Describe your event..." rows={5}
+                  style={{ width: "100%", padding: "16px 20px", borderRadius: 16, border: "1.5px solid rgba(0,0,0,0.09)", background: "#fff", fontFamily: "var(--font-montserrat)", fontSize: "0.95rem", color: S.fg, outline: "none", resize: "none", transition: "border-color 0.2s" }}
+                  onFocus={e => (e.currentTarget.style.borderColor = S.accent)}
+                  onBlur={e => (e.currentTarget.style.borderColor = "rgba(0,0,0,0.09)")}
+                />
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section className="py-32 px-6 bg-[#FDFBF7]">
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-premium font-bold mb-6">Start Your <span className="text-accent italic">Journey</span></h2>
-            <p className="text-lg text-foreground/60">Tell us about your dream event, and let's make it a royal reality.</p>
+              <div style={{ gridColumn: "1/-1" }}>
+                <button type="submit"
+                  style={{ width: "100%", padding: "18px", background: S.fg, color: "#fff", border: "none", borderRadius: 9999, fontFamily: "var(--font-montserrat)", fontWeight: 800, fontSize: "0.875rem", letterSpacing: "0.1em", textTransform: "uppercase", cursor: "pointer", transition: "all 0.3s", boxShadow: "0 8px 32px rgba(0,0,0,0.15)" }}
+                  onMouseEnter={e => { const b = e.currentTarget; b.style.background = S.accent; b.style.boxShadow = "0 12px 40px rgba(255,107,74,0.4)"; }}
+                  onMouseLeave={e => { const b = e.currentTarget; b.style.background = S.fg; b.style.boxShadow = "0 8px 32px rgba(0,0,0,0.15)"; }}
+                >
+                  Send Enquiry
+                </button>
+              </div>
+            </form>
           </div>
-          
-          <form className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-12 rounded-[2.5rem] shadow-2xl border border-border/30">
-            <div className="space-y-3">
-              <label htmlFor="name" className="text-xs font-bold uppercase tracking-widest text-foreground/50 ml-1">Full Name</label>
-              <input 
-                id="name"
-                placeholder="John Doe" 
-                className="w-full px-6 py-4 rounded-2xl bg-muted/30 border-border/50 focus:border-accent outline-none transition-all"
-              />
-            </div>
-            <div className="space-y-3">
-              <label htmlFor="email" className="text-xs font-bold uppercase tracking-widest text-foreground/50 ml-1">Email Address</label>
-              <input 
-                id="email"
-                type="email"
-                placeholder="john@example.com" 
-                className="w-full px-6 py-4 rounded-2xl bg-muted/30 border-border/50 focus:border-accent outline-none transition-all"
-              />
-            </div>
-            <div className="md:col-span-2 space-y-3">
-              <label htmlFor="message" className="text-xs font-bold uppercase tracking-widest text-foreground/50 ml-1">Your Vision</label>
-              <textarea 
-                id="message"
-                placeholder="Describe your event..." 
-                className="w-full px-6 py-4 rounded-2xl bg-muted/30 border-border/50 focus:border-accent outline-none transition-all min-h-[150px] resize-none"
-              />
-            </div>
-            <div className="md:col-span-2 pt-4">
-              <button className="w-full py-5 bg-accent text-white rounded-full font-black tracking-[0.2em] uppercase hover:bg-foreground transition-all duration-500 shadow-xl shadow-accent/20">
-                Send Enquiry
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
+        </section>
 
-      <footer className="py-20 border-t border-border px-6">
+        {/* ── Testimonials ── */}
+        <section style={{ padding: "120px 0 0 0", background: S.bg, borderRadius: "0 0 80px 80px", overflow: "hidden" }}>
+          <div style={{ textAlign: "center", marginBottom: 60 }}>
+            <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 20 }}>Voices of Royalty</p>
+            <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(36px,5vw,64px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1 }}>Client Appreciations</h2>
+          </div>
+          <StaggerTestimonials />
+        </section>
 
-        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-          <div>
-             <span className="text-2xl font-premium font-bold text-foreground">
-              ROYAL <span className="text-accent">DESI</span> CREW
-            </span>
-            <p className="mt-4 text-foreground/50 max-w-sm">
-              The premier destination for luxury event management and royal desi experiences.
-            </p>
-          </div>
-          <div className="flex gap-10">
-            <div className="space-y-4">
-              <h4 className="font-bold text-sm uppercase tracking-widest text-accent">Contact</h4>
-              <p className="text-sm">hello@royaldesicrew.com</p>
-              <p className="text-sm">+1 (234) 567-890</p>
-            </div>
-            <div className="space-y-4">
-              <h4 className="font-bold text-sm uppercase tracking-widest text-accent">Follow</h4>
-              <p className="text-sm">Instagram</p>
-              <p className="text-sm">Facebook</p>
-            </div>
-          </div>
-        </div>
-        <div className="container mx-auto mt-20 pt-10 border-t border-border flex justify-between items-center text-xs text-foreground/40">
-          <p>© 2026 ROYAL DESI CREW. ALL RIGHTS RESERVED.</p>
-          <p>DESIGNED BY ANTIGRAVITY</p>
-        </div>
-      </footer>
+        {/* ── Footer ── */}
+        <Footer />
+      </div>
 
       <FloatingBookButton />
+      <VenuesModal isOpen={isVenuesModalOpen} onClose={() => setIsVenuesModalOpen(false)} />
     </main>
   );
 }
