@@ -60,7 +60,7 @@ const packages = [
     }
 ];
 
-export default function PricingSection({ onSelect, selectedId }: { onSelect: (id: string) => void, selectedId: string }) {
+export default function PricingSection() {
     return (
         <section id="pricing" style={{ padding: "140px 32px", background: "#FDFBF7", color: "#0D0D0D", position: "relative" }}>
             <div style={{ maxWidth: 1200, margin: "0 auto" }}>
@@ -98,7 +98,6 @@ export default function PricingSection({ onSelect, selectedId }: { onSelect: (id
                     alignItems: "stretch"
                 }}>
                     {packages.map((pkg, index) => {
-                        const isSelected = selectedId === pkg.name;
                         return (
                         <motion.div
                             key={pkg.name}
@@ -106,11 +105,10 @@ export default function PricingSection({ onSelect, selectedId }: { onSelect: (id
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.7, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
-                            onClick={() => onSelect(pkg.name)}
                             style={{
                                 position: "relative",
                                 background: "#FFFFFF",
-                                border: isSelected ? "4px solid var(--accent)" : (pkg.popular ? "2px solid var(--accent)" : pkg.tag ? "2px solid #0D0D0D" : "1px solid rgba(0,0,0,0.08)"),
+                                border: pkg.popular ? "2px solid var(--accent)" : pkg.tag ? "2px solid #0D0D0D" : "1px solid rgba(0,0,0,0.08)",
                                 borderRadius: 24,
                                 padding: "40px 32px",
                                 display: "flex",
@@ -118,7 +116,7 @@ export default function PricingSection({ onSelect, selectedId }: { onSelect: (id
                                 height: "100%",
                                 minHeight: 550,
                                 cursor: "pointer",
-                                boxShadow: isSelected ? "0 40px 80px -20px rgba(255,107,74,0.4)" : (pkg.popular ? "0 40px 80px -20px rgba(0,0,0,0.15)" : "0 8px 32px rgba(0,0,0,0.04)"),
+                                boxShadow: pkg.popular ? "0 40px 80px -20px rgba(0,0,0,0.15)" : "0 8px 32px rgba(0,0,0,0.04)",
                                 transition: "all 0.4s ease"
                             }}
                         >
@@ -196,9 +194,9 @@ export default function PricingSection({ onSelect, selectedId }: { onSelect: (id
                                 style={{
                                     width: "100%",
                                     padding: "18px",
-                                    background: isSelected ? "var(--accent)" : (pkg.popular ? "var(--accent)" : "#FDFBF7"),
-                                    color: (isSelected || pkg.popular) ? "#fff" : "#0D0D0D",
-                                    border: (isSelected || pkg.popular) ? "none" : "1px solid rgba(0,0,0,0.1)",
+                                    background: pkg.popular ? "var(--accent)" : "#FDFBF7",
+                                    color: pkg.popular ? "#fff" : "#0D0D0D",
+                                    border: pkg.popular ? "none" : "1px solid rgba(0,0,0,0.1)",
                                     borderRadius: 9999,
                                     fontFamily: "var(--font-montserrat)",
                                     fontWeight: 700,
@@ -209,7 +207,7 @@ export default function PricingSection({ onSelect, selectedId }: { onSelect: (id
                                     transition: "all 0.3s ease",
                                 }}
                             >
-                                {isSelected ? "Selected ✓" : "Choose Package"}
+                                Choose Package
                             </button>
                         </motion.div>
                     )})}

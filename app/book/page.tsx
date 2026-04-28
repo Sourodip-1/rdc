@@ -35,6 +35,8 @@ type FormData = {
   venue: string;
   caterer: string;
   artist: string;
+  budget: number;
+  guests: string;
   notes: string;
 };
 
@@ -105,7 +107,7 @@ function SectionHeading({ step, total, label, sub }: { step: number; total: numb
 
 export default function BookPage() {
   const searchParams = useSearchParams();
-  const [form, setForm] = useState<FormData>({ name: "", email: "", phone: "", service: "", package: "", venue: "", caterer: "", artist: "", notes: "" });
+  const [form, setForm] = useState<FormData>({ name: "", email: "", phone: "", service: "", package: "", venue: "", caterer: "", artist: "", budget: 100000, guests: "", notes: "" });
   
   useEffect(() => {
     const service = searchParams.get("service");
@@ -389,6 +391,9 @@ function StepOne({ form, setForm, onNext }: { form: FormData; setForm: (f: FormD
           <Field id="email" label="Email Address (Optional)" type="email" placeholder="e.g. priya@example.com" value={form.email} onChange={v => setForm({ ...form, email: v })} />
         </div>
         <div style={{ gridColumn: "1/-1" }}>
+          <Field id="guests" label="Estimated Guests" type="number" placeholder="e.g. 200" required value={form.guests} onChange={v => setForm({ ...form, guests: v })} />
+        </div>
+        <div style={{ gridColumn: "1/-1" }}>
           <Field id="notes" label="Tell us about your event" type="text" placeholder="e.g. A royal Rajasthani theme with live Sufi music for 200 guests..." value={form.notes} onChange={v => setForm({ ...form, notes: v })} isTextArea />
         </div>
       </div>
@@ -407,9 +412,72 @@ function StepOne({ form, setForm, onNext }: { form: FormData; setForm: (f: FormD
 
 /* ─── Step 2: Event Type ─── */
 function StepTwo({ form, setForm, onNext }: { form: FormData; setForm: (f: FormData) => void; onNext: () => void }) {
+  const formatPrice = (val: number) => {
+    if (val >= 100000) return `₹${(val / 100000).toFixed(1)} Lakhs`;
+    return `₹${(val / 1000).toFixed(0)}k`;
+  };
+
   return (
     <div>
-      <SectionHeading step={2} total={7} label={<>What are we <em style={{ color: ACCENT, fontStyle: "italic" }}>celebrating?</em></>} sub="Choose the type of event you'd like us to organise." />
+      <SectionHeading step={2} total={7} label={<>What are we <em style={{ color: ACCENT, fontStyle: "italic" }}>celebrating?</em></>} sub="Choose the type of event and set your preferred budget." />
+      
+      {/* Budget Slider */}
+      <div style={{ background: "white", padding: "40px", borderRadius: 32, marginBottom: 60, boxShadow: "0 10px 40px rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.05)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
+          <div>
+            <h4 style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: "rgba(0,0,0,0.4)", textTransform: "uppercase", marginBottom: 12 }}>Estimated Budget</h4>
+            <div style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "2.5rem", color: ACCENT }}>{formatPrice(form.budget)}</div>
+          </div>
+          <p style={{ fontFamily: "var(--font-montserrat)", fontSize: "0.85rem", color: "rgba(0,0,0,0.5)", maxWidth: 300, textAlign: "right" }}>
+            Setting a budget helps our royal planners curate the best options for your celebration.
+          </p>
+        </div>
+        
+        <div style={{ position: "relative", height: 60, display: "flex", alignItems: "center" }}>
+          <input 
+            type="range" 
+            min="25000" 
+            max="5000000" 
+            step="25000"
+            value={form.budget}
+            onChange={(e) => setForm({ ...form, budget: parseInt(e.target.value) })}
+            style={{
+              width: "100%",
+              cursor: "pointer",
+              height: 6,
+              background: `linear-gradient(to right, ${ACCENT} 0%, ${ACCENT} ${(form.budget - 25000) / (5000000 - 25000) * 100}%, rgba(0,0,0,0.1) ${(form.budget - 25000) / (5000000 - 25000) * 100}%, rgba(0,0,0,0.1) 100%)`,
+              appearance: "none",
+              borderRadius: 999,
+              outline: "none"
+            }}
+          />
+          {/* Custom Track Markers */}
+          <div style={{ position: "absolute", bottom: -20, left: 0, right: 0, display: "flex", justifyContent: "space-between", fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", color: "rgba(0,0,0,0.3)" }}>
+            <span>25k</span>
+            <span>10L</span>
+            <span>25L</span>
+            <span>50L</span>
+          </div>
+        </div>
+        <style jsx>{`
+          input[type=range]::-webkit-slider-thumb {
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            background: white;
+            border: 4px solid ${ACCENT};
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(255,107,74,0.4);
+            cursor: pointer;
+            transition: all 0.2s ease;
+          }
+          input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255,107,74,0.5);
+          }
+        `}</style>
+      </div>
+
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 32 }}>
         {services.map((s, idx) => {
           const selected = form.service === s.id;
@@ -653,6 +721,8 @@ function StepSeven({ form, selectedService, selectedPackage, selectedVenue, sele
               { label: "Name", value: form.name || "—" },
               { label: "Phone", value: form.phone || "—" },
               ...(form.email ? [{ label: "Email", value: form.email }] : []),
+              { label: "Budget", value: form.budget >= 100000 ? `₹${(form.budget / 100000).toFixed(1)} Lakhs` : `₹${(form.budget / 1000).toFixed(0)}k` },
+              { label: "Guests", value: form.guests || "—" },
               { label: "Event Type", value: selectedService?.name || "—" },
               { label: "Package", value: selectedPackage?.name || "—" },
               { label: "Venue", value: selectedVenue?.name || "TBD by RDC" },

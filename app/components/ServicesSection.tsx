@@ -81,7 +81,7 @@ const cardVariants: Variants = {
   }),
 };
 
-export default function ServicesSection({ onSelect, selectedId }: { onSelect: (id: string) => void, selectedId: string }) {
+export default function ServicesSection() {
   const containerRef = useRef(null);
 
   return (
@@ -138,7 +138,6 @@ export default function ServicesSection({ onSelect, selectedId }: { onSelect: (i
           overflow: "hidden",
         }}>
           {SERVICES.map((service, i) => {
-            const isSelected = selectedId === service.id;
             return (
               <motion.div
                 key={service.number}
@@ -148,7 +147,6 @@ export default function ServicesSection({ onSelect, selectedId }: { onSelect: (i
                 viewport={{ once: true, margin: "-60px" }}
                 variants={cardVariants}
                 whileHover="hover"
-                onClick={() => onSelect(service.id)}
                 style={{
                   position: "relative",
                   overflow: "hidden",
@@ -158,33 +156,11 @@ export default function ServicesSection({ onSelect, selectedId }: { onSelect: (i
                   flexDirection: "column",
                   justifyContent: "flex-end",
                   borderRadius: 24,
-                  border: isSelected ? "4px solid #FF6B4A" : "1px solid rgba(0,0,0,0.05)",
-                  boxShadow: isSelected ? "0 20px 40px rgba(255,107,74,0.3)" : "none",
+                  border: "1px solid rgba(0,0,0,0.05)",
                   transition: "all 0.4s ease"
                 }}
               >
-                {/* Selection Checkmark */}
-                {isSelected && (
-                  <div style={{
-                    position: "absolute",
-                    top: 24,
-                    right: 24,
-                    zIndex: 10,
-                    background: "#FF6B4A",
-                    color: "white",
-                    width: 32,
-                    height: 32,
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
-                  }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                  </div>
-                )}
+
               {/* ── Full Photo Background ── */}
               <motion.div
                 variants={{ hover: { scale: 1.07 } }}

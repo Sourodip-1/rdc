@@ -14,7 +14,6 @@ import ServicesSection from "./components/ServicesSection";
 import GallerySection from "./components/GallerySection";
 import AboutSection from "./components/AboutSection";
 import Footer from "./components/Footer";
-import CheckoutBar from "./components/CheckoutBar";
 import services from "@/data/services.json";
 
 const S = {
@@ -47,21 +46,6 @@ export default function Home() {
   const [isCaterersModalOpen, setIsCaterersModalOpen] = useState(false);
   const [isArtistsModalOpen, setIsArtistsModalOpen] = useState(false);
 
-  const [selections, setSelections] = useState({
-    service: "",
-    venue: "",
-    caterer: "",
-    artist: "",
-    pkg: ""
-  });
-
-  const updateSelection = (key: string, value: string) => {
-    setSelections(prev => ({ ...prev, [key]: value }));
-  };
-
-  const clearSelection = (key: string) => {
-    setSelections(prev => ({ ...prev, [key]: "" }));
-  };
 
   return (
     <main style={{ background: S.bg, overflowX: "hidden" }}>
@@ -71,10 +55,7 @@ export default function Home() {
 
       <div style={{ background: S.fg }}>
         <div style={{ borderRadius: "0 0 80px 80px", overflow: "hidden", position: "relative", zIndex: 10 }}>
-          <ServicesSection 
-            onSelect={(id) => updateSelection("service", id)} 
-            selectedId={selections.service} 
-          />
+          <ServicesSection />
         </div>
       </div>
 
@@ -147,19 +128,16 @@ export default function Home() {
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
               {venues.map((v, i) => {
-                const isSelected = selections.venue === v.id;
                 return (
                   <div 
                     key={i} 
-                    onClick={() => updateSelection("venue", v.id)}
                     style={{ 
                       borderRadius: 28, 
                       overflow: "hidden", 
                       aspectRatio: "3/4", 
                       position: "relative", 
                       cursor: "pointer", 
-                      boxShadow: isSelected ? `0 24px 60px rgba(255,107,74,0.4)` : "0 24px 60px rgba(0,0,0,0.1)",
-                      border: isSelected ? `4px solid ${S.accent}` : "none",
+                      boxShadow: "0 24px 60px rgba(0,0,0,0.1)",
                       transition: "all 0.4s ease"
                     }}
                   >
@@ -167,12 +145,11 @@ export default function Home() {
                       onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
                       onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
                     />
-                    <div style={{ position: "absolute", inset: 0, background: isSelected ? "rgba(255,107,74,0.3)" : "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
-                    {isSelected && <div style={{ position: "absolute", top: 20, right: 20, background: S.accent, color: "#fff", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg></div>}
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
                     <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
                       <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{v.tag}</p>
                       <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{v.name}</h3>
-                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>{isSelected ? "Selected ✓" : "Choose Venue ↗"}</p>
+                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Venue ↗</p>
                     </div>
                   </div>
                 );
@@ -210,19 +187,16 @@ export default function Home() {
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
               {caterers.map((c, i) => {
-                const isSelected = selections.caterer === c.id;
                 return (
                   <div 
                     key={i} 
-                    onClick={() => updateSelection("caterer", c.id)}
                     style={{ 
                       borderRadius: 28, 
                       overflow: "hidden", 
                       aspectRatio: "3/4", 
                       position: "relative", 
                       cursor: "pointer", 
-                      boxShadow: isSelected ? `0 24px 60px rgba(255,107,74,0.4)` : "0 24px 60px rgba(0,0,0,0.1)",
-                      border: isSelected ? `4px solid ${S.accent}` : "none",
+                      boxShadow: "0 24px 60px rgba(0,0,0,0.1)",
                       transition: "all 0.4s ease"
                     }}
                   >
@@ -230,12 +204,11 @@ export default function Home() {
                       onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
                       onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
                     />
-                    <div style={{ position: "absolute", inset: 0, background: isSelected ? "rgba(255,107,74,0.3)" : "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
-                    {isSelected && <div style={{ position: "absolute", top: 20, right: 20, background: S.accent, color: "#fff", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg></div>}
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
                     <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
                       <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{c.tag}</p>
                       <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{c.name}</h3>
-                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>{isSelected ? "Selected ✓" : "Explore Menu ↗"}</p>
+                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Menu ↗</p>
                     </div>
                   </div>
                 );
@@ -273,19 +246,16 @@ export default function Home() {
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
               {artists.map((a, i) => {
-                const isSelected = selections.artist === a.id;
                 return (
                   <div 
                     key={i} 
-                    onClick={() => updateSelection("artist", a.id)}
                     style={{ 
                       borderRadius: 28, 
                       overflow: "hidden", 
                       aspectRatio: "3/4", 
                       position: "relative", 
                       cursor: "pointer", 
-                      boxShadow: isSelected ? `0 24px 60px rgba(255,107,74,0.4)` : "0 24px 60px rgba(0,0,0,0.1)",
-                      border: isSelected ? `4px solid ${S.accent}` : "none",
+                      boxShadow: "0 24px 60px rgba(0,0,0,0.1)",
                       transition: "all 0.4s ease"
                     }}
                   >
@@ -293,12 +263,11 @@ export default function Home() {
                       onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
                       onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
                     />
-                    <div style={{ position: "absolute", inset: 0, background: isSelected ? "rgba(255,107,74,0.3)" : "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
-                    {isSelected && <div style={{ position: "absolute", top: 20, right: 20, background: S.accent, color: "#fff", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg></div>}
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
                     <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
                       <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{a.tag}</p>
                       <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{a.name}</h3>
-                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>{isSelected ? "Selected ✓" : "Explore Talent ↗"}</p>
+                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Talent ↗</p>
                     </div>
                   </div>
                 );
@@ -307,13 +276,8 @@ export default function Home() {
           </div>
         </section>
 
-        <PricingSection 
-          onSelect={(id) => updateSelection("pkg", id)} 
-          selectedId={selections.pkg} 
-        />
+        <PricingSection />
       </div>
-
-      <CheckoutBar selections={selections} clearSelection={clearSelection} />
 
 
       {/* Scoped Dark Background for Inverse Rounding transition */}
