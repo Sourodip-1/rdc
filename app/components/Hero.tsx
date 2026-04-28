@@ -320,11 +320,13 @@ export default function Hero() {
             </svg>
           </a>
           <Link
-            href="#"
+            href="/catalog.pdf"
+            download
             style={{
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
+              gap: "10px",
               padding: "18px 44px",
               background: "transparent",
               color: "#0D0D0D",
@@ -351,7 +353,10 @@ export default function Hero() {
               el.style.transform = "translateY(0)";
             }}
           >
-            Explore Work
+            Download Catalogs
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v4m4-10l5 5 5-5m-5 5V3" />
+            </svg>
           </Link>
         </div>
 
@@ -368,7 +373,7 @@ export default function Hero() {
         >
           {[
             { num: "500+", label: "Events Crafted" },
-            { num: "12yr", label: "Of Excellence" },
+            { num: "9yr", label: "Of Excellence" },
             { num: "98%", label: "Client Satisfaction" },
           ].map((stat, i) => (
             <div

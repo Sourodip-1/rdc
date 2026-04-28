@@ -1,63 +1,70 @@
-"use client";
-
+import { useRef } from "react";
 import { motion, Variants } from "framer-motion";
 
 const SERVICES = [
   {
+    id: "luxury-weddings",
     number: "01",
     title: "Luxury Wedding Experiences",
     description: "Grand celebrations crafted with meticulous detail — from floral curation to orchestrated timelines.",
     tag: "Signature Series",
-    imageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "/Our Services/Luxary Weddings.jpg",
   },
   {
+    id: "corporate-events",
     number: "02",
     title: "Corporate Event Experiences",
     description: "Executive-class productions that command presence, drive engagement, and leave lasting impressions.",
     tag: "Executive Series",
-    imageUrl: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop",
+    imageUrl: "/Our Services/corporate event1.jpeg",
   },
   {
+    id: "private-parties",
     number: "03",
     title: "Private Celebrations & Parties",
     description: "Intimate gatherings elevated to bespoke affairs with curated themes and flawless execution.",
     tag: "Royal Collection",
-    imageUrl: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "/Our Services/private_celebration.png",
   },
   {
+    id: "theme-design",
     number: "04",
     title: "Theme-Based Event Design",
     description: "Immersive worlds built from vision to reality — every element tells your story.",
     tag: "Bespoke Craft",
-    imageUrl: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "/Our Services/theam based party.jpg",
   },
   {
+    id: "kids-birthday",
     number: "05",
     title: "Kids Birthday Experiences",
     description: "Magical celebrations designed to spark wonder, joy, and memories that last a lifetime.",
     tag: "Little Royals",
-    imageUrl: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?q=80&w=2071&auto=format&fit=crop",
+    imageUrl: "/Our Services/birthday party.jpg",
   },
   {
+    id: "baby-shower",
     number: "06",
     title: "Elegant Baby Shower Celebrations",
     description: "Tender, refined gatherings that welcome new beginnings with warmth and elegance.",
     tag: "New Beginnings",
-    imageUrl: "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "/Our Services/baby shower.png",
   },
   {
+    id: "anniversary",
     number: "07",
     title: "Anniversary Celebrations",
     description: "Timeless tributes to love and legacy — every milestone deserves a royal moment.",
     tag: "Timeless Moments",
-    imageUrl: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "/Our Services/anniversary .png",
   },
   {
+    id: "school-events",
     number: "08",
     title: "School & Institutional Events",
     description: "Professionally managed ceremonies and galas that honour achievement and community.",
     tag: "Legacy Series",
-    imageUrl: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "/Our Services/school event management .png",
   },
 ];
 
@@ -74,9 +81,11 @@ const cardVariants: Variants = {
   }),
 };
 
-export default function ServicesSection() {
+export default function ServicesSection({ onSelect, selectedId }: { onSelect: (id: string) => void, selectedId: string }) {
+  const containerRef = useRef(null);
+
   return (
-    <section id="services" style={{ background: "#FDFBF7", padding: "120px 32px" }}>
+    <section id="services" ref={containerRef} style={{ background: "#FDFBF7", padding: "120px 32px" }}>
       {/* Centered container */}
       <div style={{ maxWidth: 1600, margin: "0 auto", width: "100%" }}>
 
@@ -128,26 +137,54 @@ export default function ServicesSection() {
           borderRadius: 32,
           overflow: "hidden",
         }}>
-          {SERVICES.map((service, i) => (
-            <motion.div
-              key={service.number}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              variants={cardVariants}
-              whileHover="hover"
-              style={{
-                position: "relative",
-                overflow: "hidden",
-                minHeight: 450,
-                cursor: "pointer",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "flex-end",
-                borderRadius: 24,
-              }}
-            >
+          {SERVICES.map((service, i) => {
+            const isSelected = selectedId === service.id;
+            return (
+              <motion.div
+                key={service.number}
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-60px" }}
+                variants={cardVariants}
+                whileHover="hover"
+                onClick={() => onSelect(service.id)}
+                style={{
+                  position: "relative",
+                  overflow: "hidden",
+                  minHeight: 450,
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                  borderRadius: 24,
+                  border: isSelected ? "4px solid #FF6B4A" : "1px solid rgba(0,0,0,0.05)",
+                  boxShadow: isSelected ? "0 20px 40px rgba(255,107,74,0.3)" : "none",
+                  transition: "all 0.4s ease"
+                }}
+              >
+                {/* Selection Checkmark */}
+                {isSelected && (
+                  <div style={{
+                    position: "absolute",
+                    top: 24,
+                    right: 24,
+                    zIndex: 10,
+                    background: "#FF6B4A",
+                    color: "white",
+                    width: 32,
+                    height: 32,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
+                  }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </div>
+                )}
               {/* ── Full Photo Background ── */}
               <motion.div
                 variants={{ hover: { scale: 1.07 } }}
@@ -261,8 +298,9 @@ export default function ServicesSection() {
                   ↗
                 </motion.div>
               </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

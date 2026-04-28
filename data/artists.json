@@ -1,0 +1,44 @@
+[
+  { 
+    "id": "symphony-strings",
+    "name": "Symphony Strings", 
+    "tag": "Classical Fusion", 
+    "coverImage": "https://images.unsplash.com/photo-1465821185615-9a43a97ae09c?q=80&w=2070&auto=format&fit=crop", 
+    "description": "A world-class string quartet blending traditional melodies with contemporary beats." 
+  },
+  { 
+    "id": "dj-maverick",
+    "name": "DJ Maverick", 
+    "tag": "Electronic & Bollywood", 
+    "coverImage": "https://images.unsplash.com/photo-1598387181032-a3103a2db5b3?q=80&w=2076&auto=format&fit=crop", 
+    "description": "The rhythm master who keeps the dance floor alive until the early hours." 
+  },
+  { 
+    "id": "royal-sufi",
+    "name": "Royal Sufi Troupe", 
+    "tag": "Sufi & Ghazal", 
+    "coverImage": "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=2069&auto=format&fit=crop", 
+    "description": "Soul-stirring performances that bring a touch of spiritual elegance to your evening." 
+  },
+  { 
+    "id": "neon-rhythm",
+    "name": "Neon Rhythm", 
+    "tag": "Live Percussion", 
+    "coverImage": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop", 
+    "description": "High-energy drumming and percussion that adds a vibrant pulse to any celebration." 
+  },
+  { 
+    "id": "jazz-collective",
+    "name": "The Jazz Collective", 
+    "tag": "Jazz & Blues", 
+    "coverImage": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=2070&auto=format&fit=crop", 
+    "description": "Sophisticated jazz arrangements for upscale cocktail hours and receptions." 
+  },
+  { 
+    "id": "magic-illusions",
+    "name": "Magic & Illusions", 
+    "tag": "Interactive Entertainment", 
+    "coverImage": "https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=2070&auto=format&fit=crop", 
+    "description": "Mind-bending magic and close-up illusions to entertain guests of all ages." 
+  }
+]

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-
 import Navbar1 from "@/components/ui/navbar-1";
 import Hero from "./components/Hero";
 import Carousel from "./components/Carousel";
@@ -9,6 +8,14 @@ import FloatingBookButton from "./components/FloatingBookButton";
 import { StaggerTestimonials } from "@/components/ui/stagger-testimonials";
 import VenuesModal from "./components/VenuesModal";
 import CaterersModal from "./components/CaterersModal";
+import ArtistsModal from "./components/ArtistsModal";
+import PricingSection from "./components/PricingSection";
+import ServicesSection from "./components/ServicesSection";
+import GallerySection from "./components/GallerySection";
+import AboutSection from "./components/AboutSection";
+import Footer from "./components/Footer";
+import CheckoutBar from "./components/CheckoutBar";
+import services from "@/data/services.json";
 
 const S = {
   maxW: { maxWidth: 1200, margin: "0 auto", width: "100%", padding: "0 32px" },
@@ -16,17 +23,45 @@ const S = {
   fg: "#0D0D0D",
   bg: "#FDFBF7",
 };
-import PricingSection from "./components/PricingSection";
-import ServicesSection from "./components/ServicesSection";
-import GallerySection from "./components/GallerySection";
-import AboutSection from "./components/AboutSection";
-import Footer from "./components/Footer";
-import services from "@/data/services.json";
-import caterers from "@/data/caterers.json";
+
+const venues = [
+  { id: "royal-palace", name: "The Royal Palace", tag: "Regal Elegance", coverImage: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2074&auto=format&fit=crop" },
+  { id: "crystal-ballroom", name: "Crystal Ballroom", tag: "Modern Luxury", coverImage: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop" },
+  { id: "garden-oasis", name: "Garden Oasis", tag: "Nature Inspired", coverImage: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop" },
+];
+
+const caterers = [
+  { id: "grand-feast", name: "The Grand Feast", tag: "Fine Dining", coverImage: "https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=2070&auto=format&fit=crop" },
+  { id: "spice-route", name: "Spice Route", tag: "Traditional", coverImage: "https://images.unsplash.com/photo-1547928576-a4a33237eceb?q=80&w=1780&auto=format&fit=crop" },
+  { id: "modern-bites", name: "Modern Bites", tag: "Fusion", coverImage: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop" },
+];
+
+const artists = [
+  { id: "symphony-strings", name: "Symphony Strings", tag: "Live Orchestra", img: "https://images.unsplash.com/photo-1514119412350-e174d90d280e?q=80&w=2070&auto=format&fit=crop" },
+  { id: "dj-maverick", name: "DJ Maverick", tag: "Elite Entertainment", img: "https://images.unsplash.com/photo-1598387181032-a3103a2db5b3?q=80&w=2076&auto=format&fit=crop" },
+  { id: "royal-sufi-troupe", name: "Royal Sufi Troupe", tag: "Traditional Excellence", img: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=2069&auto=format&fit=crop" },
+];
 
 export default function Home() {
   const [isVenuesModalOpen, setIsVenuesModalOpen] = useState(false);
   const [isCaterersModalOpen, setIsCaterersModalOpen] = useState(false);
+  const [isArtistsModalOpen, setIsArtistsModalOpen] = useState(false);
+
+  const [selections, setSelections] = useState({
+    service: "",
+    venue: "",
+    caterer: "",
+    artist: "",
+    pkg: ""
+  });
+
+  const updateSelection = (key: string, value: string) => {
+    setSelections(prev => ({ ...prev, [key]: value }));
+  };
+
+  const clearSelection = (key: string) => {
+    setSelections(prev => ({ ...prev, [key]: "" }));
+  };
 
   return (
     <main style={{ background: S.bg, overflowX: "hidden" }}>
@@ -36,7 +71,10 @@ export default function Home() {
 
       <div style={{ background: S.fg }}>
         <div style={{ borderRadius: "0 0 80px 80px", overflow: "hidden", position: "relative", zIndex: 10 }}>
-          <ServicesSection />
+          <ServicesSection 
+            onSelect={(id) => updateSelection("service", id)} 
+            selectedId={selections.service} 
+          />
         </div>
       </div>
 
@@ -71,10 +109,17 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Gallery ── */}
+      <div style={{ background: S.fg, position: "relative", zIndex: 50 }}>
+        <div style={{ background: S.bg, borderRadius: "80px 80px 0 0", overflow: "hidden" }}>
+          <GallerySection />
+        </div>
+      </div>
+
       {/* Scoped background for inverse curve */}
       <div style={{ background: S.fg }}>
         {/* ── Venues ── */}
-        <section id="venues" style={{ padding: "120px 32px", background: S.bg, borderRadius: "80px 80px 0 0", position: "relative", zIndex: 10 }}>
+        <section id="venues" style={{ padding: "120px 32px", background: S.bg, position: "relative", zIndex: 1 }}>
           <div style={S.maxW}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 24, marginBottom: 72 }}>
               <div>
@@ -101,30 +146,43 @@ export default function Home() {
               </button>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
-              {[
-                { name: "Grand Ballroom", tag: "Capacity: 800+", img: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2074&auto=format&fit=crop" },
-                { name: "Lakeside Garden", tag: "Outdoor Luxury", img: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=2069&auto=format&fit=crop" },
-                { name: "Skyline Lounge", tag: "City Views", img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070&auto=format&fit=crop" },
-              ].map((v, i) => (
-                <div key={i} style={{ borderRadius: 28, overflow: "hidden", aspectRatio: "3/4", position: "relative", cursor: "pointer", boxShadow: "0 24px 60px rgba(0,0,0,0.1)" }}>
-                  <img src={v.img} alt={v.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
-                    onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
-                    onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
-                  />
-                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
-                  <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
-                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{v.tag}</p>
-                    <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{v.name}</h3>
-                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Venue ↗</p>
+              {venues.map((v, i) => {
+                const isSelected = selections.venue === v.id;
+                return (
+                  <div 
+                    key={i} 
+                    onClick={() => updateSelection("venue", v.id)}
+                    style={{ 
+                      borderRadius: 28, 
+                      overflow: "hidden", 
+                      aspectRatio: "3/4", 
+                      position: "relative", 
+                      cursor: "pointer", 
+                      boxShadow: isSelected ? `0 24px 60px rgba(255,107,74,0.4)` : "0 24px 60px rgba(0,0,0,0.1)",
+                      border: isSelected ? `4px solid ${S.accent}` : "none",
+                      transition: "all 0.4s ease"
+                    }}
+                  >
+                    <img src={v.coverImage} alt={v.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
+                      onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
+                      onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+                    />
+                    <div style={{ position: "absolute", inset: 0, background: isSelected ? "rgba(255,107,74,0.3)" : "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
+                    {isSelected && <div style={{ position: "absolute", top: 20, right: 20, background: S.accent, color: "#fff", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg></div>}
+                    <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
+                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{v.tag}</p>
+                      <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{v.name}</h3>
+                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>{isSelected ? "Selected ✓" : "Choose Venue ↗"}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
 
         {/* ── Caterers ── */}
-        <section id="caterers" style={{ padding: "0 32px 120px 32px", background: S.bg, position: "relative", zIndex: 10 }}>
+        <section id="caterers" style={{ padding: "0 32px 120px 32px", background: S.bg, position: "relative", zIndex: 1 }}>
           <div style={S.maxW}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 24, marginBottom: 72 }}>
               <div>
@@ -151,27 +209,112 @@ export default function Home() {
               </button>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
-              {caterers.slice(0, 3).map((c, i) => (
-                <div key={i} style={{ borderRadius: 28, overflow: "hidden", aspectRatio: "3/4", position: "relative", cursor: "pointer", boxShadow: "0 24px 60px rgba(0,0,0,0.1)" }}>
-                  <img src={c.coverImage} alt={c.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
-                    onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
-                    onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
-                  />
-                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
-                  <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
-                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{c.tag}</p>
-                    <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{c.name}</h3>
-                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Menu ↗</p>
+              {caterers.map((c, i) => {
+                const isSelected = selections.caterer === c.id;
+                return (
+                  <div 
+                    key={i} 
+                    onClick={() => updateSelection("caterer", c.id)}
+                    style={{ 
+                      borderRadius: 28, 
+                      overflow: "hidden", 
+                      aspectRatio: "3/4", 
+                      position: "relative", 
+                      cursor: "pointer", 
+                      boxShadow: isSelected ? `0 24px 60px rgba(255,107,74,0.4)` : "0 24px 60px rgba(0,0,0,0.1)",
+                      border: isSelected ? `4px solid ${S.accent}` : "none",
+                      transition: "all 0.4s ease"
+                    }}
+                  >
+                    <img src={c.coverImage} alt={c.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
+                      onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
+                      onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+                    />
+                    <div style={{ position: "absolute", inset: 0, background: isSelected ? "rgba(255,107,74,0.3)" : "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
+                    {isSelected && <div style={{ position: "absolute", top: 20, right: 20, background: S.accent, color: "#fff", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg></div>}
+                    <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
+                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{c.tag}</p>
+                      <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{c.name}</h3>
+                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>{isSelected ? "Selected ✓" : "Explore Menu ↗"}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
 
-        <GallerySection />
-        <PricingSection />
+        {/* ── Artists ── */}
+        <section id="artists" style={{ padding: "0 32px 120px 32px", background: S.bg, position: "relative", zIndex: 1 }}>
+          <div style={S.maxW}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 24, marginBottom: 72 }}>
+              <div>
+                <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 20 }}>Elite Performers</p>
+                <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(40px,5vw,68px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1 }}>Our <em style={{ fontStyle: "italic", color: S.accent }}>Artists</em></h2>
+              </div>
+              <button 
+                onClick={() => setIsArtistsModalOpen(true)}
+                style={{
+                  fontFamily: "var(--font-montserrat)",
+                  fontWeight: 700,
+                  fontSize: "0.8rem",
+                  color: S.fg,
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "0 0 8px 0",
+                }}
+              >
+                VIEW ALL ARTISTS <span>→</span>
+              </button>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
+              {artists.map((a, i) => {
+                const isSelected = selections.artist === a.id;
+                return (
+                  <div 
+                    key={i} 
+                    onClick={() => updateSelection("artist", a.id)}
+                    style={{ 
+                      borderRadius: 28, 
+                      overflow: "hidden", 
+                      aspectRatio: "3/4", 
+                      position: "relative", 
+                      cursor: "pointer", 
+                      boxShadow: isSelected ? `0 24px 60px rgba(255,107,74,0.4)` : "0 24px 60px rgba(0,0,0,0.1)",
+                      border: isSelected ? `4px solid ${S.accent}` : "none",
+                      transition: "all 0.4s ease"
+                    }}
+                  >
+                    <img src={a.img} alt={a.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
+                      onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
+                      onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+                    />
+                    <div style={{ position: "absolute", inset: 0, background: isSelected ? "rgba(255,107,74,0.3)" : "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
+                    {isSelected && <div style={{ position: "absolute", top: 20, right: 20, background: S.accent, color: "#fff", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg></div>}
+                    <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
+                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{a.tag}</p>
+                      <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{a.name}</h3>
+                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>{isSelected ? "Selected ✓" : "Explore Talent ↗"}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <PricingSection 
+          onSelect={(id) => updateSelection("pkg", id)} 
+          selectedId={selections.pkg} 
+        />
       </div>
+
+      <CheckoutBar selections={selections} clearSelection={clearSelection} />
+
 
       {/* Scoped Dark Background for Inverse Rounding transition */}
       <div style={{ background: S.fg }}>
@@ -210,8 +353,8 @@ export default function Home() {
                   onBlur={e => (e.currentTarget.style.borderColor = "rgba(0,0,0,0.09)")}
                 >
                   <option value="" disabled>Choose an event type...</option>
-                  {services.map(s => (
-                    <option key={s.id} value={s.id}>{s.name}</option>
+                  {services.map((s: any) => (
+                    <option key={s.id} value={s.id}>{s.title}</option>
                   ))}
                 </select>
               </div>
@@ -247,10 +390,7 @@ export default function Home() {
 
         {/* ── About Us & Footer Wrapper for Inverse Curve ── */}
         <div style={{ background: S.fg }}>
-          <section id="about">
-            <AboutSection />
-          </section>
-
+          <AboutSection />
           {/* ── Footer ── */}
           <Footer variant="light" />
         </div>
@@ -259,6 +399,7 @@ export default function Home() {
       <FloatingBookButton />
       <VenuesModal isOpen={isVenuesModalOpen} onClose={() => setIsVenuesModalOpen(false)} />
       <CaterersModal isOpen={isCaterersModalOpen} onClose={() => setIsCaterersModalOpen(false)} />
+      <ArtistsModal isOpen={isArtistsModalOpen} onClose={() => setIsArtistsModalOpen(false)} />
     </main>
   );
 }
