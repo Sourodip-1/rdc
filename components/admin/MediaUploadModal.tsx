@@ -119,14 +119,14 @@ export const MediaUploadModal = ({ isOpen, onClose, onSuccess }: MediaUploadModa
                 </div>
                 <div className="text-center flex-shrink-0">
                   <p className="text-lg font-bold text-gray-900">Drop files here or click to browse</p>
-                  <p className="text-[11px] text-gray-400 mt-2 uppercase tracking-wider font-bold">Supports JPG, PNG, WEBP (Max 10MB)</p>
+                  <p className="text-[11px] text-gray-400 mt-2 uppercase tracking-wider font-bold">Supports JPG, PNG, WEBP, PDF (Max 10MB)</p>
                 </div>
                 <input 
                   type="file" 
                   ref={fileInputRef} 
                   onChange={handleFileSelect} 
                   className="hidden" 
-                  accept="image/*"
+                  accept="image/*,.pdf"
                   multiple
                 />
               </div>
@@ -135,7 +135,14 @@ export const MediaUploadModal = ({ isOpen, onClose, onSuccess }: MediaUploadModa
                 <div className="grid grid-cols-3 gap-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar flex-shrink-0">
                   {previews.map((preview, index) => (
                     <div key={index} className="relative aspect-square rounded-2xl overflow-hidden border border-gray-100 bg-gray-50 group">
-                      <img src={preview.url} alt={preview.name} className="w-full h-full object-cover" />
+                      {preview.type === "application/pdf" ? (
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 text-gray-400">
+                          <FileText className="h-10 w-10 mb-2" />
+                          <span className="text-[10px] font-bold uppercase truncate px-2 w-full text-center">{preview.name}</span>
+                        </div>
+                      ) : (
+                        <img src={preview.url} alt={preview.name} className="w-full h-full object-cover" />
+                      )}
                       <button 
                         onClick={() => removeFile(index)}
                         className="absolute top-2 right-2 p-1.5 bg-white/90 backdrop-blur rounded-lg text-gray-500 hover:text-red-500 shadow-sm transition-colors opacity-0 group-hover:opacity-100"
@@ -157,7 +164,7 @@ export const MediaUploadModal = ({ isOpen, onClose, onSuccess }: MediaUploadModa
                   ref={fileInputRef} 
                   onChange={handleFileSelect} 
                   className="hidden" 
-                  accept="image/*"
+                  accept="image/*,.pdf"
                   multiple
                 />
                 

@@ -18,10 +18,13 @@ export async function POST(req: Request) {
       const buffer = Buffer.from(arrayBuffer);
 
       const result = await new Promise((resolve, reject) => {
+        const isPdf = file.name.toLowerCase().endsWith('.pdf');
         cloudinary.uploader.upload_stream(
           {
             folder: 'rdc_media',
-            resource_type: 'auto',
+            resource_type: isPdf ? 'raw' : 'auto',
+            use_filename: isPdf,
+            unique_filename: !isPdf,
           },
           (error, result) => {
             if (error) reject(error);

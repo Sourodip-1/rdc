@@ -12,7 +12,9 @@ import {
   ChevronRight,
   Sparkles,
   BookOpen,
-  Users
+  Users,
+  FileText,
+  CalendarDays
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +23,11 @@ const routes = [
     label: "Dashboard",
     icon: LayoutDashboard,
     href: "/admin",
+  },
+  {
+    label: "Bookings",
+    icon: CalendarDays,
+    href: "/admin/bookings",
   },
   {
     label: "Gallery",
@@ -56,6 +63,11 @@ const routes = [
     label: "Artists",
     icon: Users,
     href: "/admin/artists",
+  },
+  {
+    label: "Catalogs",
+    icon: FileText,
+    href: "/admin/catalogs",
   },
 ];
 

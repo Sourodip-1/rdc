@@ -27,6 +27,7 @@ export const BlogModal = ({ isOpen, onClose, onSuccess, blog }: BlogModalProps) 
     excerpt: "",
     coverImageId: "",
     coverImageUrl: "",
+    category: "General",
     isPublished: true,
   });
 
@@ -38,10 +39,11 @@ export const BlogModal = ({ isOpen, onClose, onSuccess, blog }: BlogModalProps) 
         excerpt: blog.excerpt || "",
         coverImageId: blog.coverImageId?._id || blog.coverImageId || "",
         coverImageUrl: blog.coverImageId?.url || "",
+        category: blog.category || "General",
         isPublished: blog.isPublished,
       });
     } else {
-      setFormData({ title: "", content: "", excerpt: "", coverImageId: "", coverImageUrl: "", isPublished: true });
+      setFormData({ title: "", content: "", excerpt: "", coverImageId: "", coverImageUrl: "", category: "General", isPublished: true });
     }
   }, [blog, isOpen]);
 
@@ -117,6 +119,23 @@ export const BlogModal = ({ isOpen, onClose, onSuccess, blog }: BlogModalProps) 
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 required 
               />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="category" className="text-[11px] font-bold uppercase tracking-wider text-gray-400">Category</label>
+              <select 
+                id="category" 
+                className="admin-input"
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              >
+                <option value="General">General</option>
+                <option value="Trends">Trends</option>
+                <option value="Venues">Venues</option>
+                <option value="Planning">Planning</option>
+                <option value="Production">Production</option>
+                <option value="Inspiration">Inspiration</option>
+              </select>
             </div>
 
             <div className="space-y-2">

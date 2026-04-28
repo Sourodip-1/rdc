@@ -8,13 +8,13 @@ import {
   DialogTitle, 
   DialogTrigger 
 } from "@/components/ui/dialog";
-import { Loader2, Image as ImageIcon, Search, CheckCircle2, Sparkles, X } from "lucide-react";
+import { Loader2, Image as ImageIcon, Search, CheckCircle2, Sparkles, X, FileText } from "lucide-react";
 import Image from "next/image";
 
 interface MediaItem {
   _id: string;
   url: string;
-  format: "image" | "video";
+  format: "image" | "video" | "pdf";
   title?: string;
 }
 
@@ -118,12 +118,19 @@ export const MediaPicker = ({ onSelect, trigger }: MediaPickerProps) => {
                       ${selectedId === item._id ? 'border-[#FF6B4A] shadow-lg scale-[0.98]' : 'border-gray-100 hover:border-gray-200'}
                     `}
                   >
-                    <Image
-                      src={item.url}
-                      alt={item.title || "Media"}
-                      fill
-                      className="object-cover transition duration-500 group-hover:scale-110"
-                    />
+                    {item.format === "pdf" || item.url.toLowerCase().endsWith(".pdf") ? (
+                      <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 text-gray-400 p-4">
+                        <FileText size={32} className="mb-2" />
+                        <span className="text-[9px] font-bold uppercase truncate w-full text-center">{item.url.split('/').pop()}</span>
+                      </div>
+                    ) : (
+                      <Image
+                        src={item.url}
+                        alt={item.title || "Media"}
+                        fill
+                        className="object-cover transition duration-500 group-hover:scale-110"
+                      />
+                    )}
                     {selectedId === item._id && (
                       <div className="absolute inset-0 bg-[#FF6B4A]/20 flex items-center justify-center backdrop-blur-[2px]">
                         <div className="h-10 w-10 bg-[#FF6B4A] rounded-full flex items-center justify-center shadow-xl">

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { MapPin, Utensils, Image as ImageIcon, FolderSearch, LayoutDashboard, ArrowUpRight, Loader2 } from "lucide-react";
+import { MapPin, Utensils, Image as ImageIcon, FolderSearch, LayoutDashboard, ArrowUpRight, Loader2, Mic2, CalendarCheck, BookOpen } from "lucide-react";
 import Link from "next/link";
 
 interface Stats {
@@ -9,6 +9,9 @@ interface Stats {
   media: number;
   galleryItems: number;
   categories: number;
+  artists: number;
+  bookings: number;
+  blogs: number;
 }
 
 export default function AdminDashboard() {
@@ -32,6 +35,9 @@ export default function AdminDashboard() {
     { label: "Total Venues", value: stats?.venues ?? 0, icon: MapPin, href: "/admin/venues", color: "#FF6B4A", bg: "rgba(255,107,74,0.08)" },
     { label: "Catering Partners", value: stats?.caterers ?? 0, icon: Utensils, href: "/admin/caterers", color: "#a855f7", bg: "rgba(168,85,247,0.08)" },
     { label: "Gallery Items", value: stats?.galleryItems ?? 0, icon: ImageIcon, href: "/admin/gallery", color: "#3b82f6", bg: "rgba(59,130,246,0.08)" },
+    { label: "Elite Artists", value: stats?.artists ?? 0, icon: Mic2, href: "/admin/artists", color: "#f59e0b", bg: "rgba(245,158,11,0.08)" },
+    { label: "Blog Posts", value: stats?.blogs ?? 0, icon: BookOpen, href: "/admin/blogs", color: "#8b5cf6", bg: "rgba(139,92,246,0.08)" },
+    { label: "New Bookings", value: stats?.bookings ?? 0, icon: CalendarCheck, href: "/admin/bookings", color: "#ec4899", bg: "rgba(236,72,153,0.08)" },
     { label: "Media Files", value: stats?.media ?? 0, icon: FolderSearch, href: "/admin/media", color: "#10b981", bg: "rgba(16,185,129,0.08)" },
   ];
 
@@ -96,6 +102,12 @@ export default function AdminDashboard() {
                   <Utensils size={16} style={{ color: "#a855f7" }} />
                 </div>
                 <span className="admin-quick-label">Add Caterer</span>
+              </Link>
+              <Link href="/admin/artists" className="admin-quick-card">
+                <div className="admin-stat-icon" style={{ background: "rgba(245,158,11,0.08)", marginBottom: 0 }}>
+                  <Mic2 size={16} style={{ color: "#f59e0b" }} />
+                </div>
+                <span className="admin-quick-label">Add Artist</span>
               </Link>
             </div>
           </div>
