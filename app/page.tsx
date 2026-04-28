@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
 import Navbar1 from "@/components/ui/navbar-1";
 import Hero from "./components/Hero";
 import Carousel from "./components/Carousel";
@@ -9,6 +8,13 @@ import FloatingBookButton from "./components/FloatingBookButton";
 import { StaggerTestimonials } from "@/components/ui/stagger-testimonials";
 import VenuesModal from "./components/VenuesModal";
 import CaterersModal from "./components/CaterersModal";
+import ArtistsModal from "./components/ArtistsModal";
+import PricingSection from "./components/PricingSection";
+import ServicesSection from "./components/ServicesSection";
+import GallerySection from "./components/GallerySection";
+import AboutSection from "./components/AboutSection";
+import Footer from "./components/Footer";
+import services from "@/data/services.json";
 
 const S = {
   maxW: { maxWidth: 1200, margin: "0 auto", width: "100%", padding: "0 32px" },
@@ -16,13 +22,13 @@ const S = {
   fg: "#0D0D0D",
   bg: "#FDFBF7",
 };
-import PricingSection from "./components/PricingSection";
-import ServicesSection from "./components/ServicesSection";
-import GallerySection from "./components/GallerySection";
-import AboutSection from "./components/AboutSection";
-import Footer from "./components/Footer";
-import services from "@/data/services.json";
 import PortfolioModal from "./components/PortfolioModal";
+
+const artists = [
+  { id: "symphony-strings", name: "Symphony Strings", tag: "Live Orchestra", img: "https://images.unsplash.com/photo-1514119412350-e174d90d280e?q=80&w=2070&auto=format&fit=crop" },
+  { id: "dj-maverick", name: "DJ Maverick", tag: "Elite Entertainment", img: "https://images.unsplash.com/photo-1598387181032-a3103a2db5b3?q=80&w=2076&auto=format&fit=crop" },
+  { id: "royal-sufi-troupe", name: "Royal Sufi Troupe", tag: "Traditional Excellence", img: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=2069&auto=format&fit=crop" },
+];
 
 export default function Home() {
   const [isVenuesModalOpen, setIsVenuesModalOpen] = useState(false);
@@ -31,6 +37,7 @@ export default function Home() {
   const [caterers, setCaterers] = useState<any[]>([]);
   const [selectedPartner, setSelectedPartner] = useState<any>(null);
   const [counts, setCounts] = useState({ venues: 0, caterers: 0 });
+  const [isArtistsModalOpen, setIsArtistsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,10 +104,17 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Gallery ── */}
+      <div style={{ background: S.fg, position: "relative", zIndex: 50 }}>
+        <div style={{ background: S.bg, borderRadius: "80px 80px 0 0", overflow: "hidden" }}>
+          <GallerySection />
+        </div>
+      </div>
+
       {/* Scoped background for inverse curve */}
       <div style={{ background: S.fg }}>
         {/* ── Venues ── */}
-        <section id="venues" style={{ padding: "120px 32px", background: S.bg, borderRadius: "80px 80px 0 0", position: "relative", zIndex: 10 }}>
+        <section id="venues" style={{ padding: "120px 32px", background: S.bg, position: "relative", zIndex: 1 }}>
           <div style={S.maxW}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 24, marginBottom: 72 }}>
               <div>
@@ -151,14 +165,15 @@ export default function Home() {
                     <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{v.name}</h3>
                     <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Venue ↗</p>
                   </div>
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
 
         {/* ── Caterers ── */}
-        <section id="caterers" style={{ padding: "0 32px 120px 32px", background: S.bg, position: "relative", zIndex: 10 }}>
+        <section id="caterers" style={{ padding: "0 32px 120px 32px", background: S.bg, position: "relative", zIndex: 1 }}>
           <div style={S.maxW}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 24, marginBottom: 72 }}>
               <div>
@@ -209,15 +224,75 @@ export default function Home() {
                     <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{c.name}</h3>
                     <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Menu ↗</p>
                   </div>
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
 
-        <GallerySection />
+        {/* ── Artists ── */}
+        <section id="artists" style={{ padding: "0 32px 120px 32px", background: S.bg, position: "relative", zIndex: 1 }}>
+          <div style={S.maxW}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 24, marginBottom: 72 }}>
+              <div>
+                <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: S.accent, textTransform: "uppercase", marginBottom: 20 }}>Elite Performers</p>
+                <h2 style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "clamp(40px,5vw,68px)", letterSpacing: "-0.03em", color: S.fg, lineHeight: 1 }}>Our <em style={{ fontStyle: "italic", color: S.accent }}>Artists</em></h2>
+              </div>
+              <button 
+                onClick={() => setIsArtistsModalOpen(true)}
+                style={{
+                  fontFamily: "var(--font-montserrat)",
+                  fontWeight: 700,
+                  fontSize: "0.8rem",
+                  color: S.fg,
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "0 0 8px 0",
+                }}
+              >
+                VIEW ALL ARTISTS <span>→</span>
+              </button>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
+              {artists.map((a, i) => {
+                return (
+                  <div 
+                    key={i} 
+                    style={{ 
+                      borderRadius: 28, 
+                      overflow: "hidden", 
+                      aspectRatio: "3/4", 
+                      position: "relative", 
+                      cursor: "pointer", 
+                      boxShadow: "0 24px 60px rgba(0,0,0,0.1)",
+                      transition: "all 0.4s ease"
+                    }}
+                  >
+                    <img src={a.img} alt={a.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
+                      onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
+                      onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+                    />
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
+                    <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
+                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{a.tag}</p>
+                      <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{a.name}</h3>
+                      <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Talent ↗</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         <PricingSection />
       </div>
+
 
       {/* Scoped Dark Background for Inverse Rounding transition */}
       <div style={{ background: S.fg }}>
@@ -256,8 +331,8 @@ export default function Home() {
                   onBlur={e => (e.currentTarget.style.borderColor = "rgba(0,0,0,0.09)")}
                 >
                   <option value="" disabled>Choose an event type...</option>
-                  {services.map(s => (
-                    <option key={s.id} value={s.id}>{s.name}</option>
+                  {services.map((s: any) => (
+                    <option key={s.id} value={s.id}>{s.title}</option>
                   ))}
                 </select>
               </div>
@@ -293,10 +368,7 @@ export default function Home() {
 
         {/* ── About Us & Footer Wrapper for Inverse Curve ── */}
         <div style={{ background: S.fg }}>
-          <section id="about">
-            <AboutSection />
-          </section>
-
+          <AboutSection />
           {/* ── Footer ── */}
           <Footer variant="light" />
         </div>
@@ -305,7 +377,6 @@ export default function Home() {
       <FloatingBookButton />
       <VenuesModal isOpen={isVenuesModalOpen} onClose={() => setIsVenuesModalOpen(false)} />
       <CaterersModal isOpen={isCaterersModalOpen} onClose={() => setIsCaterersModalOpen(false)} />
-
       <PortfolioModal 
         isOpen={!!selectedPartner}
         onClose={() => setSelectedPartner(null)}
@@ -313,6 +384,7 @@ export default function Home() {
         subtitle={selectedPartner?.location ? "Venue Portfolio" : "Caterer Portfolio"}
         items={selectedPartner?.mediaCollection || []}
       />
+      <ArtistsModal isOpen={isArtistsModalOpen} onClose={() => setIsArtistsModalOpen(false)} />
     </main>
   );
 }

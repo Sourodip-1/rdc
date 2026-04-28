@@ -4,13 +4,17 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
 const IMAGES = [
-  "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1519222970733-f546218fa6d7?q=80&w=2070&auto=format&fit=crop",
+  "/Wedding/WhatsApp Image 2026-04-06 at 5.47.58 PM.jpeg",
+  "/Wedding/WhatsApp Image 2026-04-06 at 5.50.08 PM.jpeg",
+  "/Wedding/WhatsApp Image 2026-04-06 at 5.53.15 PM.jpeg",
+  "/Wedding/WhatsApp Image 2026-04-06 at 5.50.04 PM.jpeg",
+  "/Decor & Design/FB_IMG_1770890920042.jpg",
+  "/Decor & Design/fb2.jpg",
+  "/Decor & Design/FB_IMG_1770890938956.jpg",
+  "/Corporate Events/corporate event1.jpeg",
+  "/Birthday/enhanced_4.jpg",
+  "/Birthday/enhanced_5.jpg",
+  "/Birthday/enhanced_2.jpg",
 ];
 
 // Sizes per card slot (cycles every 3)
@@ -146,12 +150,12 @@ export default function Carousel() {
                     onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.opacity = "1")}
                     onMouseLeave={e => ((e.currentTarget as HTMLDivElement).style.opacity = "0")}
                   >
-                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.2em", color: "#FF6B4A", textTransform: "uppercase", marginBottom: 6 }}>
+                    {/*<p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.2em", color: "#FF6B4A", textTransform: "uppercase", marginBottom: 6 }}>
                       Signature Series
                     </p>
                     <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.2rem", color: "#fff", lineHeight: 1.3 }}>
                       A Night of<br />Pure Elegance
-                    </h3>
+                    </h3>*/}
                   </div>
                 </div>
               </div>

@@ -3,12 +3,14 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Check, ChevronDown } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import Navbar1 from "@/components/ui/navbar-1";
 import Footer from "@/app/components/Footer";
 import services from "@/data/services.json";
 import packages from "@/data/packages.json";
 import venues from "@/data/venues.json";
 import caterers from "@/data/caterers.json";
+import artists from "@/data/artists.json";
 
 const ACCENT = "#FF6B4A";
 const BG = "#FDFBF7";
@@ -20,7 +22,8 @@ const STEPS = [
   { id: 3, label: "Package" },
   { id: 4, label: "Venue" },
   { id: 5, label: "Caterers" },
-  { id: 6, label: "Confirm" },
+  { id: 6, label: "Artists" },
+  { id: 7, label: "Confirm" },
 ];
 
 type FormData = {
@@ -31,6 +34,9 @@ type FormData = {
   package: string;
   venue: string;
   caterer: string;
+  artist: string;
+  budget: number;
+  guests: string;
   notes: string;
 };
 
@@ -100,11 +106,33 @@ function SectionHeading({ step, total, label, sub }: { step: number; total: numb
 }
 
 export default function BookPage() {
-  const [form, setForm] = useState<FormData>({ name: "", email: "", phone: "", service: "", package: "", venue: "", caterer: "", notes: "" });
+  const searchParams = useSearchParams();
+  const [form, setForm] = useState<FormData>({ name: "", email: "", phone: "", service: "", package: "", venue: "", caterer: "", artist: "", budget: 100000, guests: "", notes: "" });
+  
+  useEffect(() => {
+    const service = searchParams.get("service");
+    const pkg = searchParams.get("package");
+    const venue = searchParams.get("venue");
+    const caterer = searchParams.get("caterer");
+    const artist = searchParams.get("artist");
+
+    if (service || pkg || venue || caterer || artist) {
+      setForm(prev => ({
+        ...prev,
+        service: service || prev.service,
+        package: pkg || prev.package,
+        venue: venue || prev.venue,
+        caterer: caterer || prev.caterer,
+        artist: artist || prev.artist,
+      }));
+    }
+  }, [searchParams]);
+
   const [activeStep, setActiveStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const sectionRefs = [
+    useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
@@ -150,6 +178,7 @@ export default function BookPage() {
   const selectedPackage = packages.find(p => p.id === form.package);
   const selectedVenue = venues.find(v => v.id === form.venue);
   const selectedCaterer = caterers.find(c => c.id === form.caterer);
+  const selectedArtist = artists.find(a => a.id === form.artist);
 
   if (isSubmitted) {
     return (
@@ -223,7 +252,8 @@ export default function BookPage() {
                                  (s.id === 2 && form.service) ||
                                  (s.id === 3 && form.package) ||
                                  (s.id === 4 && form.venue) ||
-                                 (s.id === 5 && form.caterer);
+                                 (s.id === 5 && form.caterer) ||
+                                 (s.id === 6 && form.artist);
               const isActive = activeStep === s.id;
               
               return (
@@ -324,10 +354,19 @@ export default function BookPage() {
 
         <div style={{ height: 1, background: "rgba(0,0,0,0.05)" }} />
 
-        {/* Step 6 — Confirm */}
-        <div ref={sectionRefs[5]} style={{ paddingTop: 120, paddingBottom: 140 }}>
+        {/* Step 6 — Artist */}
+        <div ref={sectionRefs[5]} style={{ paddingTop: 120, paddingBottom: 120 }}>
           <RevealSection id="step-6">
-            <StepSix form={form} selectedService={selectedService} selectedPackage={selectedPackage} selectedVenue={selectedVenue} selectedCaterer={selectedCaterer} setIsSubmitted={setIsSubmitted} />
+            <StepSixArtist form={form} setForm={setForm} onNext={() => scrollTo(6)} />
+          </RevealSection>
+        </div>
+
+        <div style={{ height: 1, background: "rgba(0,0,0,0.05)" }} />
+
+        {/* Step 7 — Confirm */}
+        <div ref={sectionRefs[6]} style={{ paddingTop: 120, paddingBottom: 140 }}>
+          <RevealSection id="step-7">
+            <StepSeven form={form} selectedService={selectedService} selectedPackage={selectedPackage} selectedVenue={selectedVenue} selectedCaterer={selectedCaterer} selectedArtist={selectedArtist} setIsSubmitted={setIsSubmitted} />
           </RevealSection>
         </div>
       </div>
@@ -344,12 +383,15 @@ function StepOne({ form, setForm, onNext }: { form: FormData; setForm: (f: FormD
   const canNext = form.name.trim() && form.phone.trim();
   return (
     <div>
-      <SectionHeading step={1} total={6} label={<>Tell us about <em style={{ color: ACCENT, fontStyle: "italic" }}>yourself</em></>} sub="We'd love to know who we're planning for." />
+      <SectionHeading step={1} total={7} label={<>Tell us about <em style={{ color: ACCENT, fontStyle: "italic" }}>yourself</em></>} sub="We'd love to know who we're planning for." />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 28 }}>
         <Field id="name" label="Full Name" type="text" placeholder="e.g. Priya Sharma" required value={form.name} onChange={v => setForm({ ...form, name: v })} />
         <Field id="phone" label="Phone Number" type="tel" placeholder="e.g. +91 98765 43210" required value={form.phone} onChange={v => setForm({ ...form, phone: v })} />
         <div style={{ gridColumn: "1/-1" }}>
           <Field id="email" label="Email Address (Optional)" type="email" placeholder="e.g. priya@example.com" value={form.email} onChange={v => setForm({ ...form, email: v })} />
+        </div>
+        <div style={{ gridColumn: "1/-1" }}>
+          <Field id="guests" label="Estimated Guests" type="number" placeholder="e.g. 200" required value={form.guests} onChange={v => setForm({ ...form, guests: v })} />
         </div>
         <div style={{ gridColumn: "1/-1" }}>
           <Field id="notes" label="Tell us about your event" type="text" placeholder="e.g. A royal Rajasthani theme with live Sufi music for 200 guests..." value={form.notes} onChange={v => setForm({ ...form, notes: v })} isTextArea />
@@ -370,9 +412,72 @@ function StepOne({ form, setForm, onNext }: { form: FormData; setForm: (f: FormD
 
 /* ─── Step 2: Event Type ─── */
 function StepTwo({ form, setForm, onNext }: { form: FormData; setForm: (f: FormData) => void; onNext: () => void }) {
+  const formatPrice = (val: number) => {
+    if (val >= 100000) return `₹${(val / 100000).toFixed(1)} Lakhs`;
+    return `₹${(val / 1000).toFixed(0)}k`;
+  };
+
   return (
     <div>
-      <SectionHeading step={2} total={6} label={<>What are we <em style={{ color: ACCENT, fontStyle: "italic" }}>celebrating?</em></>} sub="Choose the type of event you'd like us to organise." />
+      <SectionHeading step={2} total={7} label={<>What are we <em style={{ color: ACCENT, fontStyle: "italic" }}>celebrating?</em></>} sub="Choose the type of event and set your preferred budget." />
+      
+      {/* Budget Slider */}
+      <div style={{ background: "white", padding: "40px", borderRadius: 32, marginBottom: 60, boxShadow: "0 10px 40px rgba(0,0,0,0.04)", border: "1px solid rgba(0,0,0,0.05)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 32 }}>
+          <div>
+            <h4 style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.2em", color: "rgba(0,0,0,0.4)", textTransform: "uppercase", marginBottom: 12 }}>Estimated Budget</h4>
+            <div style={{ fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "2.5rem", color: ACCENT }}>{formatPrice(form.budget)}</div>
+          </div>
+          <p style={{ fontFamily: "var(--font-montserrat)", fontSize: "0.85rem", color: "rgba(0,0,0,0.5)", maxWidth: 300, textAlign: "right" }}>
+            Setting a budget helps our royal planners curate the best options for your celebration.
+          </p>
+        </div>
+        
+        <div style={{ position: "relative", height: 60, display: "flex", alignItems: "center" }}>
+          <input 
+            type="range" 
+            min="25000" 
+            max="5000000" 
+            step="25000"
+            value={form.budget}
+            onChange={(e) => setForm({ ...form, budget: parseInt(e.target.value) })}
+            style={{
+              width: "100%",
+              cursor: "pointer",
+              height: 6,
+              background: `linear-gradient(to right, ${ACCENT} 0%, ${ACCENT} ${(form.budget - 25000) / (5000000 - 25000) * 100}%, rgba(0,0,0,0.1) ${(form.budget - 25000) / (5000000 - 25000) * 100}%, rgba(0,0,0,0.1) 100%)`,
+              appearance: "none",
+              borderRadius: 999,
+              outline: "none"
+            }}
+          />
+          {/* Custom Track Markers */}
+          <div style={{ position: "absolute", bottom: -20, left: 0, right: 0, display: "flex", justifyContent: "space-between", fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", color: "rgba(0,0,0,0.3)" }}>
+            <span>25k</span>
+            <span>10L</span>
+            <span>25L</span>
+            <span>50L</span>
+          </div>
+        </div>
+        <style jsx>{`
+          input[type=range]::-webkit-slider-thumb {
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            background: white;
+            border: 4px solid ${ACCENT};
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(255,107,74,0.4);
+            cursor: pointer;
+            transition: all 0.2s ease;
+          }
+          input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255,107,74,0.5);
+          }
+        `}</style>
+      </div>
+
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 32 }}>
         {services.map((s, idx) => {
           const selected = form.service === s.id;
@@ -418,7 +523,7 @@ function StepTwo({ form, setForm, onNext }: { form: FormData; setForm: (f: FormD
 function StepThree({ form, setForm, onNext }: { form: FormData; setForm: (f: FormData) => void; onNext: () => void }) {
   return (
     <div>
-      <SectionHeading step={3} total={6} label={<>Choose your <em style={{ color: ACCENT, fontStyle: "italic" }}>package</em></>} sub="Select the experience that fits your vision." />
+      <SectionHeading step={3} total={7} label={<>Choose your <em style={{ color: ACCENT, fontStyle: "italic" }}>package</em></>} sub="Select the experience that fits your vision." />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 24 }}>
         {packages.map((pkg, idx) => {
           const selected = form.package === pkg.id;
@@ -470,7 +575,7 @@ function StepThree({ form, setForm, onNext }: { form: FormData; setForm: (f: For
 function StepFour({ form, setForm, onNext }: { form: FormData; setForm: (f: FormData) => void; onNext: () => void }) {
   return (
     <div>
-      <SectionHeading step={4} total={6} label={<>Pick your <em style={{ color: ACCENT, fontStyle: "italic" }}>venue</em></>} sub="Optional — skip if you'd like us to recommend one." />
+      <SectionHeading step={4} total={7} label={<>Pick your <em style={{ color: ACCENT, fontStyle: "italic" }}>venue</em></>} sub="Optional — skip if you'd like us to recommend one." />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 32 }}>
         {venues.map((v, idx) => {
           const selected = form.venue === v.id;
@@ -513,7 +618,7 @@ function StepFour({ form, setForm, onNext }: { form: FormData; setForm: (f: Form
 function StepFive({ form, setForm, onNext }: { form: FormData; setForm: (f: FormData) => void; onNext: () => void }) {
   return (
     <div>
-      <SectionHeading step={5} total={6} label={<>Choose Your <em style={{ color: ACCENT, fontStyle: "italic" }}>Caterers</em></>} sub="Optional — skip if you'd like us to recommend one." />
+      <SectionHeading step={5} total={7} label={<>Choose Your <em style={{ color: ACCENT, fontStyle: "italic" }}>Caterers</em></>} sub="Optional — skip if you'd like us to recommend one." />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 32 }}>
         {caterers.map((c, idx) => {
           const selected = form.caterer === c.id;
@@ -545,6 +650,49 @@ function StepFive({ form, setForm, onNext }: { form: FormData; setForm: (f: Form
           onClick={onNext}
           style={{ padding: "18px 52px", borderRadius: 999, background: FG, color: "white", border: "none", fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.85rem", cursor: "pointer", boxShadow: "0 10px 30px rgba(0,0,0,0.15)", letterSpacing: "0.1em", textTransform: "uppercase" }}
         >
+          Choose Artists ↓
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Step 6: Artist ─── */
+function StepSixArtist({ form, setForm, onNext }: { form: FormData; setForm: (f: FormData) => void; onNext: () => void }) {
+  return (
+    <div>
+      <SectionHeading step={6} total={7} label={<>Select Your <em style={{ color: ACCENT, fontStyle: "italic" }}>Entertainment</em></>} sub="Optional — skip if you'd like us to recommend an artist." />
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 32 }}>
+        {artists.map((a, idx) => {
+          const selected = form.artist === a.id;
+          const inactive = form.artist && !selected;
+          return (
+            <motion.div
+              key={a.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: idx * 0.07 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              onClick={() => setForm({ ...form, artist: selected ? "" : a.id })}
+              style={{ position: "relative", borderRadius: 32, overflow: "hidden", cursor: "pointer", border: selected ? `4px solid ${ACCENT}` : "3px solid transparent", boxShadow: selected ? `0 20px 60px rgba(255,107,74,0.35)` : "0 8px 30px rgba(0,0,0,0.08)", transition: "all 0.4s ease", aspectRatio: "16/10", opacity: inactive ? 0.4 : 1 }}
+            >
+              <img src={a.coverImage} alt={a.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <div style={{ position: "absolute", inset: 0, background: selected ? "rgba(255,107,74,0.4)" : "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 70%)" }} />
+              {selected && <div style={{ position: "absolute", top: 16, right: 16, background: ACCENT, borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0,0,0,0.2)" }}><Check size={18} color="white" strokeWidth={4} /></div>}
+              <div style={{ position: "absolute", bottom: 0, padding: "28px 32px" }}>
+                <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.15em", color: ACCENT, textTransform: "uppercase", marginBottom: 6 }}>{a.tag}</p>
+                <h4 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.3rem", color: "white" }}>{a.name}</h4>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", marginTop: 60 }}>
+        <button
+          onClick={onNext}
+          style={{ padding: "18px 52px", borderRadius: 999, background: FG, color: "white", border: "none", fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.85rem", cursor: "pointer", boxShadow: "0 10px 30px rgba(0,0,0,0.15)", letterSpacing: "0.1em", textTransform: "uppercase" }}
+        >
           Review Summary ↓
         </button>
       </div>
@@ -552,18 +700,19 @@ function StepFive({ form, setForm, onNext }: { form: FormData; setForm: (f: Form
   );
 }
 
-/* ─── Step 6: Confirm ─── */
-function StepSix({ form, selectedService, selectedPackage, selectedVenue, selectedCaterer, setIsSubmitted }: { 
+/* ─── Step 7: Confirm ─── */
+function StepSeven({ form, selectedService, selectedPackage, selectedVenue, selectedCaterer, selectedArtist, setIsSubmitted }: { 
   form: FormData; 
   selectedService: typeof services[0] | undefined; 
   selectedPackage: typeof packages[0] | undefined; 
   selectedVenue: typeof venues[0] | undefined;
   selectedCaterer: typeof caterers[0] | undefined;
+  selectedArtist: typeof artists[0] | undefined;
   setIsSubmitted: (v: boolean) => void;
 }) {
   return (
     <div>
-      <SectionHeading step={6} total={6} label={<>Review your <em style={{ color: ACCENT, fontStyle: "italic" }}>booking</em></>} sub="Everything looking good? Let's make it happen." />
+      <SectionHeading step={7} total={7} label={<>Review your <em style={{ color: ACCENT, fontStyle: "italic" }}>booking</em></>} sub="Everything looking good? Let's make it happen." />
       <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 40, alignItems: "start" }}>
         <div style={{ background: "#fff", borderRadius: 36, padding: "48px", boxShadow: "0 10px 50px rgba(0,0,0,0.06)", border: "1px solid rgba(0,0,0,0.05)" }}>
           <h3 style={{ fontFamily: "var(--font-montserrat)", fontWeight: 800, fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(0,0,0,0.55)", marginBottom: 24 }}>Your Details</h3>
@@ -572,10 +721,13 @@ function StepSix({ form, selectedService, selectedPackage, selectedVenue, select
               { label: "Name", value: form.name || "—" },
               { label: "Phone", value: form.phone || "—" },
               ...(form.email ? [{ label: "Email", value: form.email }] : []),
+              { label: "Budget", value: form.budget >= 100000 ? `₹${(form.budget / 100000).toFixed(1)} Lakhs` : `₹${(form.budget / 1000).toFixed(0)}k` },
+              { label: "Guests", value: form.guests || "—" },
               { label: "Event Type", value: selectedService?.name || "—" },
               { label: "Package", value: selectedPackage?.name || "—" },
               { label: "Venue", value: selectedVenue?.name || "TBD by RDC" },
               { label: "Caterer", value: selectedCaterer?.name || "TBD by RDC" },
+              { label: "Artist", value: selectedArtist?.name || "TBD by RDC" },
             ].map((row, i) => (
               <div key={row.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 0", borderBottom: "1px solid rgba(0,0,0,0.05)" }}>
                 <span style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(0,0,0,0.55)" }}>{row.label}</span>
@@ -617,13 +769,13 @@ function StepSix({ form, selectedService, selectedPackage, selectedVenue, select
             </div>
           )}
 
-          {selectedVenue && (
+          {selectedArtist && (
             <div style={{ borderRadius: 32, overflow: "hidden", position: "relative", minHeight: 180, flex: 1, boxShadow: "0 15px 40px rgba(0,0,0,0.12)" }}>
-              <img src={selectedVenue.coverImage} alt={selectedVenue.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+              <img src={selectedArtist.coverImage} alt={selectedArtist.name} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.9), transparent 70%)" }} />
               <div style={{ position: "absolute", bottom: 0, padding: "24px 32px" }}>
-                <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.15em", color: ACCENT, textTransform: "uppercase", marginBottom: 6 }}>Selected Venue</p>
-                <h4 style={{ fontFamily: "var(--font-playfair)", fontWeight: 800, fontSize: "1.3rem", color: "white" }}>{selectedVenue.name}</h4>
+                <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.15em", color: ACCENT, textTransform: "uppercase", marginBottom: 6 }}>Featured Artist</p>
+                <h4 style={{ fontFamily: "var(--font-playfair)", fontWeight: 800, fontSize: "1.3rem", color: "white" }}>{selectedArtist.name}</h4>
               </div>
             </div>
           )}

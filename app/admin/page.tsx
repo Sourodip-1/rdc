@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { MapPin, Utensils, Image as ImageIcon, FolderSearch, LayoutDashboard, ArrowUpRight, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -136,3 +135,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
