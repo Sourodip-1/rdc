@@ -1,94 +1,138 @@
 "use client";
-import { useState } from "react";
 
-export default function AdminUploadPanel() {
-  const [url, setUrl] = useState("");
-  const [category, setCategory] = useState("Gallery");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+import { useState, useEffect } from "react";
+import { MapPin, Utensils, Image as ImageIcon, FolderSearch, LayoutDashboard, ArrowUpRight, Loader2 } from "lucide-react";
+import Link from "next/link";
 
-  const handleUpload = async (e: any) => {
-    e.preventDefault();
-    const file = e.target.file.files[0];
-    if (!file) return;
+interface Stats {
+  venues: number;
+  caterers: number;
+  media: number;
+  galleryItems: number;
+  categories: number;
+}
 
-    setLoading(true);
-    setError("");
-    setUrl("");
+export default function AdminDashboard() {
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [loading, setLoading] = useState(true);
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("category", category);
+  useEffect(() => { fetchStats(); }, []);
 
+  const fetchStats = async () => {
     try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      
-      if (!res.ok) {
-        throw new Error(data.error || "Upload failed");
-      }
-
-      setUrl(data.url);
-    } catch (err: any) {
-      setError(err.message);
+      const res = await fetch("/api/admin/stats");
+      setStats(await res.json());
+    } catch (e) {
+      console.error(e);
     } finally {
       setLoading(false);
     }
   };
 
+  const cards = [
+    { label: "Total Venues", value: stats?.venues ?? 0, icon: MapPin, href: "/admin/venues", color: "#FF6B4A", bg: "rgba(255,107,74,0.08)" },
+    { label: "Catering Partners", value: stats?.caterers ?? 0, icon: Utensils, href: "/admin/caterers", color: "#a855f7", bg: "rgba(168,85,247,0.08)" },
+    { label: "Gallery Items", value: stats?.galleryItems ?? 0, icon: ImageIcon, href: "/admin/gallery", color: "#3b82f6", bg: "rgba(59,130,246,0.08)" },
+    { label: "Media Files", value: stats?.media ?? 0, icon: FolderSearch, href: "/admin/media", color: "#10b981", bg: "rgba(16,185,129,0.08)" },
+  ];
+
+  if (loading) {
+    return (
+      <div className="admin-spinner-wrap">
+        <Loader2 className="h-7 w-7 animate-spin" style={{ color: "var(--admin-accent)" }} />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-black text-white p-10 flex flex-col items-center pt-32">
-      <h1 className="text-4xl font-bold mb-8">Admin Panel - Upload Media</h1>
-      
-      <form onSubmit={handleUpload} className="bg-zinc-900 p-8 rounded-xl flex flex-col gap-6 w-full max-w-md border border-zinc-800">
+    <div>
+      <div className="admin-page-header">
         <div>
-          <label className="block text-sm font-medium mb-2">Category</label>
-          <select 
-            value={category} 
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full bg-zinc-800 text-white p-3 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="Venues">Venues</option>
-            <option value="Caterer">Caterer</option>
-            <option value="Gallery">Gallery</option>
-          </select>
+          <h1 className="admin-page-title">Dashboard Overview</h1>
+          <p className="admin-page-subtitle">Welcome back — here's the current state of your platform.</p>
+        </div>
+      </div>
+
+      {/* Stat Cards */}
+      <div className="admin-stat-grid">
+        {cards.map((card) => (
+          <Link key={card.label} href={card.href} className="admin-stat-card">
+            <ArrowUpRight className="admin-stat-arrow" size={18} />
+            <div className="admin-stat-icon" style={{ background: card.bg }}>
+              <card.icon size={18} style={{ color: card.color }} />
+            </div>
+            <p className="admin-stat-label">{card.label}</p>
+            <p className="admin-stat-value">{card.value}</p>
+          </Link>
+        ))}
+      </div>
+
+      {/* Bottom Section */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+        {/* Quick Actions */}
+        <div className="admin-card">
+          <div className="admin-card-body">
+            <p className="admin-section-title">Quick Actions</p>
+            <div className="admin-quick-grid">
+              <Link href="/admin/media" className="admin-quick-card">
+                <div className="admin-stat-icon" style={{ background: "rgba(16,185,129,0.08)", marginBottom: 0 }}>
+                  <FolderSearch size={16} style={{ color: "#10b981" }} />
+                </div>
+                <span className="admin-quick-label">Upload Media</span>
+              </Link>
+              <Link href="/admin/gallery" className="admin-quick-card">
+                <div className="admin-stat-icon" style={{ background: "rgba(59,130,246,0.08)", marginBottom: 0 }}>
+                  <LayoutDashboard size={16} style={{ color: "#3b82f6" }} />
+                </div>
+                <span className="admin-quick-label">Update Gallery</span>
+              </Link>
+              <Link href="/admin/venues" className="admin-quick-card">
+                <div className="admin-stat-icon" style={{ background: "rgba(255,107,74,0.08)", marginBottom: 0 }}>
+                  <MapPin size={16} style={{ color: "#FF6B4A" }} />
+                </div>
+                <span className="admin-quick-label">Add Venue</span>
+              </Link>
+              <Link href="/admin/caterers" className="admin-quick-card">
+                <div className="admin-stat-icon" style={{ background: "rgba(168,85,247,0.08)", marginBottom: 0 }}>
+                  <Utensils size={16} style={{ color: "#a855f7" }} />
+                </div>
+                <span className="admin-quick-label">Add Caterer</span>
+              </Link>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Select File (Photo/Video)</label>
-          <input 
-            type="file" 
-            name="file"
-            accept="image/*,video/*"
-            className="w-full bg-zinc-800 text-white p-2 rounded-lg outline-none"
-          />
+        {/* System Status */}
+        <div className="admin-card">
+          <div className="admin-card-body">
+            <p className="admin-section-title">System Status</p>
+            <div className="admin-status-list">
+              <div className="admin-status-row">
+                <span className="admin-status-key">Database</span>
+                <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, color: "#16a34a" }}>
+                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e", display: "inline-block" }} />
+                  CONNECTED
+                </span>
+              </div>
+              <div className="admin-status-row">
+                <span className="admin-status-key">Cloudinary API</span>
+                <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, color: "#16a34a" }}>
+                  <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e", display: "inline-block" }} />
+                  ACTIVE
+                </span>
+              </div>
+              <div className="admin-status-row">
+                <span className="admin-status-key">Dynamic Categories</span>
+                <span className="admin-status-val">{stats?.categories ?? 0} Total</span>
+              </div>
+              <div className="admin-status-row">
+                <span className="admin-status-key">Gallery Items</span>
+                <span className="admin-status-val">{stats?.galleryItems ?? 0} Published</span>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <button 
-          type="submit" 
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors disabled:opacity-50"
-        >
-          {loading ? "Uploading..." : "Upload"}
-        </button>
-        
-        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-      </form>
-
-      {url && (
-        <div className="mt-8 flex flex-col items-center gap-4">
-          <h2 className="text-2xl font-semibold">Upload Successful!</h2>
-          <p className="text-zinc-400 break-all max-w-xl text-center">{url}</p>
-          {url.match(/\.(mp4|webm|ogg)$/i) ? (
-            <video src={url} controls className="max-w-md rounded-xl shadow-lg border border-zinc-800" />
-          ) : (
-            <img src={url} alt="Uploaded" className="max-w-md rounded-xl shadow-lg border border-zinc-800" />
-          )}
-        </div>
-      )}
+      </div>
     </div>
   );
 }

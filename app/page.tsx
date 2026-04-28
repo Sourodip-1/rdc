@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Navbar1 from "@/components/ui/navbar-1";
 import Hero from "./components/Hero";
@@ -22,11 +22,37 @@ import GallerySection from "./components/GallerySection";
 import AboutSection from "./components/AboutSection";
 import Footer from "./components/Footer";
 import services from "@/data/services.json";
-import caterers from "@/data/caterers.json";
+import PortfolioModal from "./components/PortfolioModal";
 
 export default function Home() {
   const [isVenuesModalOpen, setIsVenuesModalOpen] = useState(false);
   const [isCaterersModalOpen, setIsCaterersModalOpen] = useState(false);
+  const [venues, setVenues] = useState<any[]>([]);
+  const [caterers, setCaterers] = useState<any[]>([]);
+  const [selectedPartner, setSelectedPartner] = useState<any>(null);
+  const [counts, setCounts] = useState({ venues: 0, caterers: 0 });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [vRes, cRes] = await Promise.all([
+          fetch("/api/admin/venues"),
+          fetch("/api/admin/caterers")
+        ]);
+        const [vData, cData] = await Promise.all([vRes.json(), cRes.json()]);
+        
+        setVenues(Array.isArray(vData) ? vData.slice(0, 3) : []);
+        setCaterers(Array.isArray(cData) ? cData.slice(0, 3) : []);
+        setCounts({
+          venues: Array.isArray(vData) ? vData.length : 0,
+          caterers: Array.isArray(cData) ? cData.length : 0
+        });
+      } catch (err) {
+        console.error("Failed to fetch home data:", err);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <main style={{ background: S.bg, overflowX: "hidden" }}>
@@ -101,19 +127,27 @@ export default function Home() {
               </button>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
-              {[
-                { name: "Grand Ballroom", tag: "Capacity: 800+", img: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2074&auto=format&fit=crop" },
-                { name: "Lakeside Garden", tag: "Outdoor Luxury", img: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=2069&auto=format&fit=crop" },
-                { name: "Skyline Lounge", tag: "City Views", img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070&auto=format&fit=crop" },
-              ].map((v, i) => (
-                <div key={i} style={{ borderRadius: 28, overflow: "hidden", aspectRatio: "3/4", position: "relative", cursor: "pointer", boxShadow: "0 24px 60px rgba(0,0,0,0.1)" }}>
-                  <img src={v.img} alt={v.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
+              {venues.map((v, i) => (
+                <div 
+                  key={v._id} 
+                  onClick={() => i === 2 ? setIsVenuesModalOpen(true) : setSelectedPartner(v)}
+                  style={{ borderRadius: 28, overflow: "hidden", aspectRatio: "3/4", position: "relative", cursor: "pointer", boxShadow: "0 24px 60px rgba(0,0,0,0.1)" }}
+                >
+                  <img src={v.coverImageId?.url || v.coverImageUrl} alt={v.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
                     onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
                     onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
                   />
                   <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
+                  
+                  {i === 2 && counts.venues > 3 && (
+                    <div style={{ position: "absolute", inset: 0, background: "rgba(255,107,74,0.4)", backdropFilter: "blur(4px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#fff" }}>
+                       <span style={{ fontFamily: "var(--font-playfair)", fontSize: "3rem", fontWeight: 900 }}>+{counts.venues - 2}</span>
+                       <span style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.8rem", letterSpacing: "0.2em" }}>VIEW ALL</span>
+                    </div>
+                  )}
+
                   <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
-                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{v.tag}</p>
+                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{v.category || v.location}</p>
                     <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{v.name}</h3>
                     <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Venue ↗</p>
                   </div>
@@ -151,15 +185,27 @@ export default function Home() {
               </button>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
-              {caterers.slice(0, 3).map((c, i) => (
-                <div key={i} style={{ borderRadius: 28, overflow: "hidden", aspectRatio: "3/4", position: "relative", cursor: "pointer", boxShadow: "0 24px 60px rgba(0,0,0,0.1)" }}>
-                  <img src={c.coverImage} alt={c.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
+              {caterers.map((c, i) => (
+                <div 
+                  key={c._id} 
+                  onClick={() => i === 2 ? setIsCaterersModalOpen(true) : setSelectedPartner(c)}
+                  style={{ borderRadius: 28, overflow: "hidden", aspectRatio: "3/4", position: "relative", cursor: "pointer", boxShadow: "0 24px 60px rgba(0,0,0,0.1)" }}
+                >
+                  <img src={c.coverImageId?.url || c.coverImageUrl} alt={c.name} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 1.2s cubic-bezier(0.16,1,0.3,1)" }}
                     onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
                     onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
                   />
                   <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)" }} />
+                  
+                  {i === 2 && counts.caterers > 3 && (
+                    <div style={{ position: "absolute", inset: 0, background: "rgba(255,107,74,0.4)", backdropFilter: "blur(4px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#fff" }}>
+                       <span style={{ fontFamily: "var(--font-playfair)", fontSize: "3rem", fontWeight: 900 }}>+{counts.caterers - 2}</span>
+                       <span style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.8rem", letterSpacing: "0.2em" }}>VIEW ALL</span>
+                    </div>
+                  )}
+
                   <div style={{ position: "absolute", bottom: 0, left: 0, padding: "32px" }}>
-                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{c.tag}</p>
+                    <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 700, fontSize: "0.65rem", letterSpacing: "0.18em", color: S.accent, textTransform: "uppercase", marginBottom: 8 }}>{c.categories?.join(", ") || "Culinary Experts"}</p>
                     <h3 style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, fontSize: "1.5rem", color: "#fff" }}>{c.name}</h3>
                     <p style={{ fontFamily: "var(--font-montserrat)", fontWeight: 600, fontSize: "0.8rem", color: "rgba(255,255,255,0.6)", marginTop: 6, letterSpacing: "0.08em" }}>Explore Menu ↗</p>
                   </div>
@@ -259,6 +305,14 @@ export default function Home() {
       <FloatingBookButton />
       <VenuesModal isOpen={isVenuesModalOpen} onClose={() => setIsVenuesModalOpen(false)} />
       <CaterersModal isOpen={isCaterersModalOpen} onClose={() => setIsCaterersModalOpen(false)} />
+
+      <PortfolioModal 
+        isOpen={!!selectedPartner}
+        onClose={() => setSelectedPartner(null)}
+        title={selectedPartner?.name || ""}
+        subtitle={selectedPartner?.location ? "Venue Portfolio" : "Caterer Portfolio"}
+        items={selectedPartner?.mediaCollection || []}
+      />
     </main>
   );
 }
